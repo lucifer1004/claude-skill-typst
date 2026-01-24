@@ -4,6 +4,14 @@ A comprehensive skill for Typst document creation and package development.
 
 ## Installation
 
+One-line install:
+
+```bash
+npx skills add https://github.com/lucifer1004/claude-skill-typst
+```
+
+Manual install:
+
 ```bash
 git clone https://github.com/lucifer1004/claude-skill-typst.git ~/.claude/skills/typst
 ```
