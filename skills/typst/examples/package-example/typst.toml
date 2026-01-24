@@ -1,0 +1,12 @@
+[package]
+name = "example-utils"
+version = "0.1.0"
+entrypoint = "lib.typ"
+authors = ["Your Name <@github-username>"]
+license = "MIT"
+description = "Example utility package with common helper functions"
+repository = "https://github.com/username/example-utils"
+keywords = ["utility", "helpers", "example"]
+categories = ["utility"]
+compiler = "0.12.0"
+exclude = ["tests/*", "docs/*"]
