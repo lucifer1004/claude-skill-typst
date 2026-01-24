@@ -47,6 +47,8 @@ pdftotext /tmp/hello.pdf - | head -20
 | `package.md`    | Package development and publishing           |
 | `conversion.md` | Markdown/LaTeX to Typst conversion           |
 | `debug.md`      | Debugging techniques for agents              |
+| `perf.md`       | Performance profiling and timings            |
+| `examples/`     | Runnable examples (including perf test)      |
 
 ## Usage
 

@@ -56,6 +56,7 @@ Content goes here.
 | Package development, publishing                 | [package.md](package.md)       |
 | Converting from Markdown/LaTeX                  | [conversion.md](conversion.md) |
 | Debugging techniques (pdftotext, repr, measure) | [debug.md](debug.md)           |
+| Performance profiling (timings, hotspots)       | [perf.md](perf.md)             |
 
 ## When to Use Each Reference
 
@@ -115,6 +116,14 @@ For debugging Typst documents (especially for agents):
 - `repr()` for inspecting complex objects
 - `measure()` + `place()` for layout debugging
 - State and query debugging patterns
+
+### perf.md
+
+For performance profiling and timing analysis:
+
+- `--timings` JSON trace output
+- Aggregating hotspots from trace events
+- Viewing traces in Chrome/Perfetto
 
 ## Compilation
 
