@@ -1,0 +1,6 @@
+__pycache__
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+.ruff_cache
+.pytest_cache

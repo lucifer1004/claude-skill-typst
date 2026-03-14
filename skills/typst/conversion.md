@@ -457,15 +457,15 @@ pandoc input.md -o output.pdf --pdf-engine=typst \
 
 1. **Citation handling**: `@ref` in Markdown becomes `#cite(<ref>)` in Typst. Escape with `\@` if literal `@` needed.
 
-2. **Image sizing**: Default image dimensions may differ from other outputs. Specify width explicitly:
+1. **Image sizing**: Default image dimensions may differ from other outputs. Specify width explicitly:
 
    ```markdown
    ![Alt text](image.png){width=80%}
    ```
 
-3. **Complex tables**: Cell merging and advanced table features may need manual adjustment.
+1. **Complex tables**: Cell merging and advanced table features may need manual adjustment.
 
-4. **Raw blocks**: Use raw Typst blocks for unsupported features:
+1. **Raw blocks**: Use raw Typst blocks for unsupported features:
 
    ````markdown
    ```{=typst}
@@ -493,9 +493,9 @@ typst compile document.typ
 ## Best Practices
 
 1. **Preserve semantics**: Map to equivalent Typst elements, not just visual appearance
-2. **Use functions**: For repeated patterns, create helper functions
-3. **Handle edge cases**: Empty content, special characters, nested structures
-4. **Test incrementally**: Convert small sections and verify output
-5. **Keep formatting minimal**: Let Typst defaults handle most styling
-6. **Use Pandoc for bulk conversion**: Automate repetitive conversions with scripts
-7. **Post-process Pandoc output**: Review and refine generated Typst code for complex documents
+1. **Use functions**: For repeated patterns, create helper functions
+1. **Handle edge cases**: Empty content, special characters, nested structures
+1. **Test incrementally**: Convert small sections and verify output
+1. **Keep formatting minimal**: Let Typst defaults handle most styling
+1. **Use Pandoc for bulk conversion**: Automate repetitive conversions with scripts
+1. **Post-process Pandoc output**: Review and refine generated Typst code for complex documents

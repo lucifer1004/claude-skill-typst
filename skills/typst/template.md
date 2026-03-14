@@ -190,6 +190,6 @@ Find elements in the document. For detailed query patterns, see [advanced.md](ad
 ## Best Practices
 
 1. **Set rules** for defaults, **show rules** for transformations
-2. Use **context** sparingly - it adds complexity
-3. Provide **configuration options** via template parameters
-4. Test edge cases: empty content, long titles, many pages
+1. Use **context** sparingly - it adds complexity
+1. Provide **configuration options** via template parameters
+1. Test edge cases: empty content, long titles, many pages

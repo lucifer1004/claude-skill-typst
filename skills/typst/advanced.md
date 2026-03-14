@@ -260,9 +260,9 @@ Closures cannot mutate captured variables. Use these patterns:
 ## Performance Tips
 
 1. **Precompute at document end**: Use `context` with `query()` and `.final()` to compute once
-2. **Avoid deep recursion**: Typst has function call depth limits (~256)
-3. **Cache expensive operations**: Store in state, compute once
-4. **Use `.at(key, default: x)` instead of checking then accessing**
+1. **Avoid deep recursion**: Typst has function call depth limits (~256)
+1. **Cache expensive operations**: Store in state, compute once
+1. **Use `.at(key, default: x)` instead of checking then accessing**
 
 ```typst
 // ❌ Slower

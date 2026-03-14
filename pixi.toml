@@ -1,0 +1,16 @@
+[workspace]
+authors = ["Zihua Wu <13583761+lucifer1004@users.noreply.github.com>"]
+channels = ["conda-forge"]
+name = "claude-skill-typst"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+test = "pytest tests/ -v"
+fetch = "python tools/fetch-packages.py"
+search = "python skills/typst/scripts/search-packages.py"
+
+[dependencies]
+python = ">=3.10"
+pytest = ">=8"
+pre-commit = ">=4"

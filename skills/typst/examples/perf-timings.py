@@ -111,11 +111,11 @@ def main():
         return
 
     print(f"Top {args.top} timings:")
-    print(f'{"Name":<50} {"Count":>8} {"Total (ms)":>12}')
+    print(f"{'Name':<50} {'Count':>8} {'Total (ms)':>12}")
     print("-" * 72)
     for name, stats in items:
         total_ms = stats["total"] / 1000
-        print(f'{name[:50]:<50} {stats["count"]:>8} {total_ms:>12.2f}')
+        print(f"{name[:50]:<50} {stats['count']:>8} {total_ms:>12.2f}")
 
 
 if __name__ == "__main__":
