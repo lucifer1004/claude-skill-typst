@@ -194,25 +194,11 @@ Query finds elements in the document. Requires `context`.
 }
 ```
 
-## Working Around Closure Limitations
+## Closure Workarounds
 
-Closures cannot mutate captured variables. Use these patterns:
+Closures cannot mutate captured variables (see basics.md "Mutability in Closures"). Beyond the loop accumulation pattern, two more options:
 
-### Pattern 1: Accumulate in Loop
-
-```typst
-// ❌ WRONG
-#let results = ()
-#let process(x) = { results.push(x) }  // Error!
-
-// ✅ CORRECT
-#let results = ()
-#for item in items {
-  results.push(transform(item))
-}
-```
-
-### Pattern 2: Fold for Accumulation
+### Fold for Accumulation
 
 ```typst
 // Build dictionary from array
@@ -222,7 +208,7 @@ Closures cannot mutate captured variables. Use these patterns:
 })
 ```
 
-### Pattern 3: State for Cross-Document
+### State for Cross-Document
 
 ```typst
 #let _data = state("data", ())
@@ -237,41 +223,4 @@ Closures cannot mutate captured variables. Use these patterns:
 }
 ```
 
-## Content vs String
-
-```typst
-// Content - rich formatted output
-#let c = [Hello *world*]
-
-// String - plain text
-#let s = "Hello world"
-
-// Convert string to content (implicit in most cases)
-#[#s]
-
-// Check if "empty"
-#let is-empty(x) = {
-  x == none or x == "" or x == []
-}
-
-// Concatenate content
-#let result = [#prefix#body#suffix]
-
-// For strings, use +
-#let combined = prefix-str + body-str + suffix-str
-```
-
-## Performance Tips
-
-1. **Precompute at document end**: Use `context` with `query()` and `.final()` to compute once
-2. **Avoid deep recursion**: Typst has function call depth limits (~256)
-3. **Cache expensive operations**: Store in state, compute once
-4. **Use `.at(key, default: x)` instead of checking then accessing**
-
-```typst
-// ❌ Slower
-#if key in dict { dict.at(key) } else { default }
-
-// ✅ Faster
-#dict.at(key, default: default)
-```
+For performance profiling and optimization, see [perf.md](perf.md).

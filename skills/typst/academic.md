@@ -214,14 +214,6 @@ Typst has no built-in theorem environment, but you can build one with counters a
 }
 ```
 
-## Footnotes
-
-```typst
-This claim needs support.#footnote[See Smith (2024) for details.]
-
-Footnotes auto-number and appear at page bottom.
-```
-
 ## Figure and Table Numbering
 
 ```typst
@@ -245,47 +237,7 @@ See @tab:data for results.
 ) <fig:results>
 ```
 
-## Two-Column Layout
-
-```typst
-// Whole document
-#set page(columns: 2)
-
-// Specific section
-#columns(2, gutter: 12pt)[
-  First column text...
-  #colbreak()
-  Second column text...
-]
-```
-
-### Full-Width Element in Two-Column
-
-```typst
-#set page(columns: 2)
-
-// Span both columns
-#place(top + center, scope: "parent", float: true)[
-  #figure(
-    image("wide-figure.png", width: 100%),
-    caption: [Wide figure spanning both columns],
-  )
-]
-```
-
-## Appendix
-
-```typst
-// After main body
-#pagebreak()
-#counter(heading).update(0)
-#set heading(numbering: "A.1")
-
-= Additional Proofs
-
-== Proof of Theorem 1
-...
-```
+For two-column layout and full-width elements in multi-column documents, see [styling.md](styling.md).
 
 ## Common Academic Patterns
 
@@ -298,4 +250,6 @@ See @tab:data for results.
 | Keywords line     | `*Keywords:* word1, word2, word3`                                   |
 | Acknowledgments   | `#heading(numbering: none)[Acknowledgments]`                        |
 | Line numbers      | Not built-in — use `@preview/lineno` package                        |
+| Footnotes         | `Text#footnote[Note content].` — auto-numbered                      |
 | Subfigures        | Not built-in — use `@preview/subpar` package                        |
+| Appendix          | See "Appendix" in [styling.md](styling.md)                          |

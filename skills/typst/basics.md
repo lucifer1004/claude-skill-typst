@@ -315,15 +315,19 @@ Functions without explicit return value return `none`:
 }
 ```
 
-### Content vs Value Context
+### Content vs String
 
 ```typst
-// ❌ WRONG - Math in content mode
-#let x = 1 + 2  // This is fine
-[x = 1 + 2]     // This shows literal "1 + 2"
+// Content brackets are literal text — code is not evaluated inside
+[1 + 2]         // Shows literal "1 + 2"
+[Result: #(1 + 2)]  // Shows "Result: 3"
 
-// ✅ CORRECT
-[x = #(1 + 2)]  // Shows "x = 3"
+// Concatenation differs by type
+#let result = [#prefix#body#suffix]       // content
+#let combined = prefix-str + body-str     // string
+
+// Check if "empty"
+#let is-empty(x) = { x == none or x == "" or x == [] }
 ```
 
 ### Spacing
@@ -339,22 +343,4 @@ Functions without explicit return value return `none`:
 
 ## Error Handling
 
-### Assert
-
-```typst
-#let divide(a, b) = {
-  assert(b != 0, message: "Division by zero")
-  a / b
-}
-```
-
-### Panic
-
-```typst
-#let required(x) = {
-  if x == none {
-    panic("Value is required")
-  }
-  x
-}
-```
+Use `assert(condition, message: "...")` for preconditions and `panic("...")` for unreachable states.

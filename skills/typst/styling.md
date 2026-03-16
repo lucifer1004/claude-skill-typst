@@ -142,17 +142,37 @@ To query labels programmatically, see the Query System in [advanced.md](advanced
 #set heading(numbering: "A.1")
 ```
 
+## Multi-Column Layout
+
+```typst
+// Whole document
+#set page(columns: 2)
+
+// Specific section
+#columns(2, gutter: 12pt)[
+  First column text...
+  #colbreak()
+  Second column text...
+]
+```
+
+### Full-Width Element in Two-Column
+
+```typst
+#set page(columns: 2)
+
+#place(top + center, scope: "parent", float: true)[
+  #figure(
+    image("wide-figure.png", width: 100%),
+    caption: [Wide figure spanning both columns],
+  )
+]
+```
+
 ## Quick Patterns
 
 | Pattern         | Code                                                |
 | --------------- | --------------------------------------------------- |
 | Title page      | `#align(center + horizon)[...]` then `#pagebreak()` |
-| Two columns     | `#set page(columns: 2)` or `#columns(2)[...]`       |
 | Bibliography    | `#bibliography("refs.bib", style: "ieee")`          |
 | Horizontal rule | `#line(length: 100%)`                               |
-
-## Best Practices
-
-1. **Set rules** for defaults, **show rules** for transformations
-2. Use **context** sparingly — it adds complexity
-3. Test edge cases: empty content, long titles, many pages

@@ -60,7 +60,7 @@ Content goes here.
 
 ## Finding Packages
 
-Search the embedded index of 1,188 Typst Universe packages (updated weekly):
+Search the embedded index of Typst Universe packages (updated weekly):
 
 ```bash
 python3 scripts/search-packages.py "what you need"

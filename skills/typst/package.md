@@ -109,17 +109,7 @@ Modules must form a DAG (no circular imports).
 #let note(body, type: "info") = { ... }
 ```
 
-### Configuration Pattern
-
-```typst
-#let default-config = (color: blue, size: 12pt)
-
-#let configure(..overrides) = {
-  let cfg = default-config
-  for (k, v) in overrides.named() { cfg.insert(k, v) }
-  cfg
-}
-```
+For configuration patterns (default dictionaries, overrides), see [template.md](template.md).
 
 ## Local Development
 

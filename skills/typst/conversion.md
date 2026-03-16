@@ -14,54 +14,7 @@ For Typst language fundamentals (modes, functions), see [basics.md](basics.md). 
 | List item | `- item`      | `\item item`       | `- item`             |
 | Numbered  | `1. item`     | `\item item`       | `+ item`             |
 
-### Headings
-
-```typst
-= Level 1 Heading
-== Level 2 Heading
-=== Level 3 Heading
-==== Level 4 Heading
-```
-
-Or functional syntax:
-
-```typst
-#heading(level: 1)[Title]
-#heading(level: 2, numbering: none)[Unnumbered]
-```
-
-### Lists
-
-```typst
-// Unordered
-- First item
-- Second item
-  - Nested item
-
-// Ordered
-+ First item
-+ Second item
-  + Nested item
-
-// Term list
-/ Term: Definition
-/ Another: Its definition
-```
-
-### Links and References
-
-```typst
-// External link
-#link("https://example.com")[Click here]
-
-// Internal reference
-#set heading(numbering: "1.")
-See @introduction for details.
-= Introduction <introduction>
-
-// Footnote
-Text with footnote#footnote[Footnote content].
-```
+For full Typst syntax details on headings, lists, links, and references, see [basics.md](basics.md).
 
 ## Math Conversion
 
@@ -126,21 +79,7 @@ The value is #mi(`\alpha + \beta`).
 
 ## Code Blocks
 
-```typst
-// Inline code
-Use the `print` function.
-```
-
-Code block with language:
-
-````typst
-```python
-def hello():
-    print("Hello")
-```
-````
-
-Raw block with language:
+Inline code uses backticks (same as Markdown). Fenced code blocks use triple backticks with language name. For programmatic raw content:
 
 ```typst
 #raw("print('hello')", lang: "python", block: true)
@@ -249,7 +188,7 @@ Characters requiring escape with backslash:
 | `@`       | `\@`     | Reference     |
 | `<`       | `\<`     | Label start   |
 | `>`       | `\>`     | Label end     |
-| `/`       | `\/`     | Comment       |
+| `/`       | `\/`     | Term list     |
 | `` ` ``   | `` \` `` | Raw text      |
 | `\`       | `\\`     | Escape char   |
 
@@ -325,38 +264,6 @@ Some *bold* and _italic_ text.
 - List item 2
 ```
 
-## Common Patterns
-
-### Horizontal Rule
-
-```typst
-#line(length: 100%)
-```
-
-### Page Break
-
-```typst
-#pagebreak()
-#pagebreak(weak: true)  // Only if not at page start
-```
-
-### Spacing
-
-```typst
-#v(1em)  // Vertical space
-#h(1em)  // Horizontal space
-#parbreak()  // Paragraph break
-```
-
-### Comments
-
-```typst
-// Single line comment
-
-/* Multi-line
-   comment */
-```
-
 ## Using Pandoc for Conversion
 
 Pandoc (since v2.18) supports Typst as an output format, enabling automated conversion from Markdown, LaTeX, and other formats.
@@ -411,25 +318,7 @@ pandoc input.md -t typst -o output.typ \
   -V mainfont="Times New Roman"
 ```
 
-### Available Variables
-
-| Variable            | Description                                   | Example            |
-| ------------------- | --------------------------------------------- | ------------------ |
-| `title`             | Document title                                | `"My Report"`      |
-| `author`            | Author name(s)                                | `"John Doe"`       |
-| `date`              | Document date                                 | `"2024-01-01"`     |
-| `papersize`         | Paper size                                    | `a4`, `letter`     |
-| `margin`            | Page margins (x, y, top, bottom, left, right) | `2cm`              |
-| `fontsize`          | Base font size                                | `11pt`             |
-| `mainfont`          | Main text font                                | Font name          |
-| `mathfont`          | Math font                                     | Font name          |
-| `codefont`          | Code font                                     | Font name          |
-| `section-numbering` | Heading number format                         | `"1.1"`, `"1.A.1"` |
-| `page-numbering`    | Page number format                            | `"1"`, `"i"`       |
-| `columns`           | Number of columns                             | `1`, `2`           |
-| `linestretch`       | Line spacing multiplier                       | `1.5`              |
-| `linkcolor`         | External link color (hex)                     | `"4183c4"`         |
-| `citecolor`         | Citation link color (hex)                     | `"000000"`         |
+All variables shown in the YAML example above (`title`, `author`, `papersize`, `margin`, `fontsize`, `mainfont`/`mathfont`/`codefont`, `section-numbering`, `page-numbering`, `columns`, `linestretch`, `linkcolor`, `citecolor`) can also be set via `-V key=value`.
 
 ### Custom Templates
 
@@ -475,28 +364,13 @@ pandoc input.md -o output.pdf --pdf-engine=typst \
    ```
    ````
 
-### Workflow Example
+### Workflow
 
 ```bash
-# Convert with custom settings
-pandoc document.md \
-  -t typst \
-  -o document.typ \
-  -V papersize=a4 \
-  -V mainfont="Libertinus Serif" \
-  -V section-numbering="1.1" \
-  --toc
-
-# Compile to PDF
+pandoc document.md -t typst -o document.typ \
+  -V papersize=a4 -V mainfont="Libertinus Serif" \
+  -V section-numbering="1.1" --toc
 typst compile document.typ
 ```
 
-## Best Practices
-
-1. **Preserve semantics**: Map to equivalent Typst elements, not just visual appearance
-2. **Use functions**: For repeated patterns, create helper functions
-3. **Handle edge cases**: Empty content, special characters, nested structures
-4. **Test incrementally**: Convert small sections and verify output
-5. **Keep formatting minimal**: Let Typst defaults handle most styling
-6. **Use Pandoc for bulk conversion**: Automate repetitive conversions with scripts
-7. **Post-process Pandoc output**: Review and refine generated Typst code for complex documents
+Review and refine Pandoc output for complex documents — cell merging, custom styling, and advanced layout usually need manual adjustment.
