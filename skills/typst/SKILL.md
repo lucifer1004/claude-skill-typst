@@ -35,12 +35,14 @@ Content goes here.
 
 ## Writing Documents
 
-| When you need to...                               | Read                           |
-| ------------------------------------------------- | ------------------------------ |
-| Learn syntax, imports, functions, control flow    | [basics.md](basics.md)         |
-| Learn data types, operators, string/array methods | [types.md](types.md)           |
-| Style pages, headings, figures, layout            | [styling.md](styling.md)       |
-| Convert from Markdown or LaTeX                    | [conversion.md](conversion.md) |
+| When you need to...                                | Read                           |
+| -------------------------------------------------- | ------------------------------ |
+| Learn syntax, imports, functions, control flow     | [basics.md](basics.md)         |
+| Learn data types, operators, string/array methods  | [types.md](types.md)           |
+| Style pages, headings, figures, layout             | [styling.md](styling.md)       |
+| Tables, grids, cell spans, borders, data tables    | [tables.md](tables.md)         |
+| Academic papers, bibliography, theorems, equations | [academic.md](academic.md)     |
+| Convert from Markdown or LaTeX                     | [conversion.md](conversion.md) |
 
 **Start with [basics.md](basics.md)** — it covers modes, imports, functions, control flow, and common pitfalls. For data types and operators, see [types.md](types.md).
 
@@ -96,6 +98,8 @@ python3 scripts/search-packages.py --list-categories
 | [basic-document.typ](examples/basic-document.typ)   | Complete beginner document with all common elements  |
 | [styled-document.typ](examples/styled-document.typ) | Set/show rules, page layout, multi-region document   |
 | [template-report.typ](examples/template-report.typ) | Reusable template with headers, counters, note boxes |
+| [tables-showcase.typ](examples/tables-showcase.typ) | Table features: spans, stripes, grids, data gen      |
+| [academic-paper.typ](examples/academic-paper.typ)   | Paper with theorems, equations, bibliography layout  |
 | [package-example/](examples/package-example/)       | Minimal publishable package with submodules          |
 
 ## Dependencies

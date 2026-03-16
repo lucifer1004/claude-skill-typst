@@ -1,6 +1,6 @@
 # Converting Documents to Typst
 
-For Typst language fundamentals (modes, functions), see [basics.md](basics.md). For types and operators, see [types.md](types.md).
+For Typst language fundamentals (modes, functions), see [basics.md](basics.md). For types and operators, see [types.md](types.md). For advanced table features, see [tables.md](tables.md).
 
 ## Basic Formatting
 

@@ -69,6 +69,7 @@ SKIP_PATTERNS = [
     r'#raw\("',  # raw() with string (often partial)
     r"item\.key",  # assumes dict-shaped items
     r"```xml",  # embedded raw XML blocks
+    r"@\w+\d{4}",  # citation references (require .bib file)
 ]
 
 

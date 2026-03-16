@@ -44,6 +44,8 @@ pdftotext /tmp/hello.pdf - | head -20
 | `basics.md`     | Both       | Language fundamentals, imports, functions        |
 | `types.md`      | Both       | Data types, operators, string/array/dict methods |
 | `styling.md`    | Users      | Set/show rules, page layout, figures, labels     |
+| `tables.md`     | Users      | Tables, grids, cell spans, borders, data tables  |
+| `academic.md`   | Users      | Papers, bibliography, theorems, equations        |
 | `conversion.md` | Users      | Markdown/LaTeX to Typst conversion               |
 | `advanced.md`   | Developers | State, context, query, counters, XML parsing     |
 | `template.md`   | Developers | Reusable template function patterns              |

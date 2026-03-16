@@ -112,9 +112,10 @@ python3 skills/typst/scripts/search-packages.py "chart" --top 3
 Track new features here. Move to the relevant `.md` once implemented.
 
 - [x] **Package search**: BM25 index of 1,188 Typst Universe packages (`scripts/search-packages.py`), weekly CI refresh
+- [x] **Tables and grids guide**: `tables.md` covering table(), grid(), cell spans, strokes, data generation
+- [x] **Academic writing guide**: `academic.md` for papers, bibliography, theorems, equations
 - [ ] **Chart/visualization guide**: `charts.md` covering CetZ, plotst, and raw drawing
 - [ ] **Slide/presentation guide**: `slides.md` for Polylux and touying
-- [ ] **Academic writing guide**: `academic.md` for papers, theses, citations
 - [ ] **i18n guide**: CJK, RTL, multilingual document patterns
 
 ## Commit Style
