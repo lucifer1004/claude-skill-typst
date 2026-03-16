@@ -1,3 +1,3 @@
 # Lint + format (prek)
 lint:
-    @prek run --all-files --show-diff-on-failure --color=always
+    pixi run -- prek run --all-files --show-diff-on-failure --color=always

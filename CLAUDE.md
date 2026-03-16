@@ -10,9 +10,9 @@ Everything lives under `skills/typst/`. The root `README.md` is for humans brows
 ```
 repo root (NOT bundled)               skills/typst/ (bundled skill)
 ├── tools/                            ├── SKILL.md           # Entry point
-│   └── fetch-packages.py            ├── *.md               # Reference docs
+│   └── fetch-packages.py             ├── *.md               # Reference docs
 ├── .github/workflows/                ├── scripts/
-│   └── update-packages.yml          │   └── search-packages.py
+│   └── update-packages.yml           │   └── search-packages.py
 ├── CLAUDE.md                         ├── data/
 └── README.md                         │   ├── packages.json
                                       │   └── packages-bm25.json
@@ -97,7 +97,7 @@ typst compile skills/typst/examples/package-example/lib.typ /dev/null -f pdf
 pixi run python3 skills/typst/scripts/validate-examples.py
 
 # Python scripts have valid syntax
-python3 -m py_compile skills/typst/examples/perf-timings.py
+python3 -m py_compile skills/typst/scripts/perf-timings.py
 python3 -m py_compile skills/typst/scripts/search-packages.py
 python3 -m py_compile skills/typst/scripts/validate-examples.py
 
