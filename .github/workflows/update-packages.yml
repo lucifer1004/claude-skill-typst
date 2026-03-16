@@ -23,8 +23,8 @@ jobs:
 
       - name: Normalize formatting
         run: |
-          pip install pre-commit
-          pre-commit run --files skills/typst/data/packages.json skills/typst/data/packages-bm25.json || true
+          pip install prek
+          prek run --files skills/typst/data/packages.json skills/typst/data/packages-bm25.json || true
 
       - name: Commit if changed
         run: |
