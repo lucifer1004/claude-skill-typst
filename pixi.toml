@@ -9,6 +9,8 @@ version = "0.1.0"
 test = "pytest tests/ -v"
 fetch = "python tools/fetch-packages.py"
 search = "python skills/typst/scripts/search-packages.py"
+validate = "python skills/typst/scripts/validate-examples.py"
+perf = "python skills/typst/scripts/perf-timings.py"
 
 [dependencies]
 python = ">=3.10"

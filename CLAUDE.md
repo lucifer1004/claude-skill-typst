@@ -12,12 +12,14 @@ repo root (NOT bundled)               skills/typst/ (bundled skill)
 ├── tools/                            ├── SKILL.md           # Entry point
 │   └── fetch-packages.py             ├── *.md               # Reference docs
 ├── .github/workflows/                ├── scripts/
-│   └── update-packages.yml           │   └── search-packages.py
-├── CLAUDE.md                         ├── data/
-└── README.md                         │   ├── packages.json
-                                      │   └── packages-bm25.json
-                                      └── examples/
-                                          └── package-example/
+│   ├── ci.yml                        │   ├── search-packages.py
+│   └── update-packages.yml           │   ├── validate-examples.py
+├── tests/                            │   └── perf-timings.py
+│   ├── test_search.py                ├── data/
+│   └── test_examples.py              │   ├── packages.json
+├── CLAUDE.md                         │   └── packages-bm25.json
+├── pixi.toml                         └── examples/
+└── README.md                             └── package-example/
 ```
 
 ### Architecture: The Routing Rule
@@ -69,7 +71,7 @@ If it's not in the table, agents won't find it. Dead content is worse than no co
 
 ### For Scripts
 
-- Python 3.8+ compatible (oldest version still common in the wild)
+- Python 3.10+ compatible (matches pixi.toml minimum)
 - `argparse` for CLI, with `--help` that shows real usage
 - Print structured output (tables or `--json`) so agents can parse results
 - Exit code 0 on success, non-zero on failure

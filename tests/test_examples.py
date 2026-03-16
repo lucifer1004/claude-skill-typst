@@ -125,3 +125,22 @@ def test_block_count_sanity():
     assert len(_ALL_BLOCKS) >= 100, (
         f"Expected >= 100 inline typst blocks, found {len(_ALL_BLOCKS)}"
     )
+
+
+@pytest.mark.skipif(not HAS_TYPST, reason="typst CLI not in PATH")
+def test_preamble_compiles():
+    """Ensure the injected preamble itself is valid Typst."""
+    ok, stderr = _compile_snippet("", preamble=True)
+    assert ok, f"Preamble alone failed to compile:\n{stderr}"
+
+
+@pytest.mark.skipif(not HAS_TYPST, reason="typst CLI not in PATH")
+def test_skipped_blocks_are_genuinely_problematic():
+    """Verify that at least some skipped blocks actually fail without skip protection."""
+    failures = 0
+    sample = _SKIPPED[:10]
+    for _bid, code in sample:
+        ok, _stderr = _compile_snippet(code)
+        if not ok:
+            failures += 1
+    assert failures > 0, "No skipped blocks failed — skip patterns may be too broad"

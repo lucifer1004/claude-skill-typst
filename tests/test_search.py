@@ -90,6 +90,13 @@ class TestTokenizer:
         assert sp.tokenize("") == []
         assert sp.tokenize("  - ! ") == []
 
+    def test_single_char_dropped(self):
+        assert sp.tokenize("a b c") == []
+
+    def test_unicode(self):
+        tokens = sp.tokenize("données café résumé")
+        assert len(tokens) > 0
+
 
 # ---------------------------------------------------------------------------
 # Version parsing
@@ -299,3 +306,42 @@ class TestFilters:
             compiler = pkg.get("compiler", "")
             if compiler:
                 assert sp.parse_version(compiler) <= user_v
+
+
+# ---------------------------------------------------------------------------
+# Edge cases
+# ---------------------------------------------------------------------------
+
+
+class TestEdgeCases:
+    def test_no_results(self, index, packages, packages_by_name):
+        results = _search(
+            "zzzznotawordxyz qqqnonexistent", index, packages, packages_by_name
+        )
+        assert results == []
+
+    def test_empty_query(self, index):
+        tokens = sp.tokenize("")
+        scores = sp.bm25_search(tokens, index)
+        assert len(scores) == 0
+
+    def test_single_char_query(self, index, packages, packages_by_name):
+        results = _search("a", index, packages, packages_by_name)
+        assert results == []
+
+    def test_nonexistent_category(self, packages, name_to_idx):
+        allowed = sp.filter_by_metadata(
+            packages, name_to_idx, "zzz_nonexistent_category", None
+        )
+        assert len(allowed) == 0
+
+    def test_nonexistent_discipline(self, packages, name_to_idx):
+        allowed = sp.filter_by_metadata(
+            packages, name_to_idx, None, "zzz_nonexistent_discipline"
+        )
+        assert len(allowed) == 0
+
+    def test_long_query(self, index, packages, packages_by_name):
+        query = " ".join(["chart"] * 50)
+        results = _search(query, index, packages, packages_by_name)
+        assert len(results) > 0
