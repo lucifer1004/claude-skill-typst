@@ -1,6 +1,6 @@
 # Advanced Typst Patterns
 
-For language basics (types, operators, string/array/dict operations), see [basics.md](basics.md). For labels, references, and everyday styling, see [styling.md](styling.md).
+For language basics (syntax, imports, functions), see [basics.md](basics.md). For data types and operators, see [types.md](types.md). For labels, references, and everyday styling, see [styling.md](styling.md).
 
 ## XML Parsing
 
@@ -77,6 +77,30 @@ State allows tracking information across a document. Requires `context` to read.
 #context [Count: #counter.get()]
 ```
 
+### Custom Counters
+
+```typst
+#let example-counter = counter("example")
+
+#let example(body) = {
+  example-counter.step()
+  block[*Example #context example-counter.display():* #body]
+}
+```
+
+### State for Headers
+
+```typst
+#let chapter-title = state("chapter", none)
+
+#show heading.where(level: 1): it => {
+  chapter-title.update(it.body)
+  it
+}
+
+#set page(header: context { chapter-title.get() })
+```
+
 ### Final Values
 
 ```typst
@@ -141,6 +165,17 @@ Query finds elements in the document. Requires `context`.
 // Query specific heading level
 #context {
   let h1s = query(heading.where(level: 1))
+}
+```
+
+### By Label String
+
+```typst
+#context {
+  let target = query(label("ref-mykey"))
+  if target.len() > 0 {
+    [Found at page #target.first().location().page()]
+  }
 }
 ```
 

@@ -38,18 +38,19 @@ pdftotext /tmp/hello.pdf - | head -20
 
 ## Contents
 
-| File            | Audience   | Description                                  |
-| --------------- | ---------- | -------------------------------------------- |
-| `SKILL.md`      | Both       | Main entry point with quick reference        |
-| `basics.md`     | Both       | Language fundamentals, types, imports, paths |
-| `styling.md`    | Users      | Set/show rules, page layout, figures, labels |
-| `conversion.md` | Users      | Markdown/LaTeX to Typst conversion           |
-| `advanced.md`   | Developers | State, context, query, XML parsing           |
-| `template.md`   | Developers | Reusable template function patterns          |
-| `package.md`    | Developers | Package development and publishing           |
-| `debug.md`      | Developers | Debugging techniques for agents              |
-| `perf.md`       | Developers | Performance profiling and timings            |
-| `examples/`     | Both       | Runnable examples (including perf test)      |
+| File            | Audience   | Description                                      |
+| --------------- | ---------- | ------------------------------------------------ |
+| `SKILL.md`      | Both       | Main entry point with quick reference            |
+| `basics.md`     | Both       | Language fundamentals, imports, functions        |
+| `types.md`      | Both       | Data types, operators, string/array/dict methods |
+| `styling.md`    | Users      | Set/show rules, page layout, figures, labels     |
+| `conversion.md` | Users      | Markdown/LaTeX to Typst conversion               |
+| `advanced.md`   | Developers | State, context, query, counters, XML parsing     |
+| `template.md`   | Developers | Reusable template function patterns              |
+| `package.md`    | Developers | Package development and publishing               |
+| `debug.md`      | Developers | Debugging techniques for agents                  |
+| `perf.md`       | Developers | Performance profiling and timings                |
+| `examples/`     | Both       | Runnable examples (including perf test)          |
 
 ## Usage
 

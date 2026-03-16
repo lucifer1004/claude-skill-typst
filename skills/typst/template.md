@@ -86,6 +86,15 @@ Templates can include show rules for consistent element styling:
 }
 ```
 
+## Per-Chapter Figure Numbering
+
+```typst
+#set figure(numbering: num => context {
+  let ch = counter(heading.where(level: 1)).get().first()
+  [#ch.#num]
+})
+```
+
 ## Query in Templates
 
 Templates often use `query()` to build dynamic elements like TOCs or running headers:

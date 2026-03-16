@@ -1,6 +1,6 @@
 # Typst Debugging Techniques
 
-For language basics, see [basics.md](basics.md). For state/context debugging, see [advanced.md](advanced.md).
+For language basics, see [basics.md](basics.md). For type inspection (`type()`, `repr()`), see [types.md](types.md). For state/context debugging, see [advanced.md](advanced.md).
 
 ## Agent Workflow
 

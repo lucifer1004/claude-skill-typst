@@ -35,13 +35,14 @@ Content goes here.
 
 ## Writing Documents
 
-| When you need to...                           | Read                           |
-| --------------------------------------------- | ------------------------------ |
-| Learn syntax, types, imports, path resolution | [basics.md](basics.md)         |
-| Style pages, headings, figures, layout        | [styling.md](styling.md)       |
-| Convert from Markdown or LaTeX                | [conversion.md](conversion.md) |
+| When you need to...                               | Read                           |
+| ------------------------------------------------- | ------------------------------ |
+| Learn syntax, imports, functions, control flow    | [basics.md](basics.md)         |
+| Learn data types, operators, string/array methods | [types.md](types.md)           |
+| Style pages, headings, figures, layout            | [styling.md](styling.md)       |
+| Convert from Markdown or LaTeX                    | [conversion.md](conversion.md) |
 
-**Start with [basics.md](basics.md)** — it covers modes, imports, data types, functions, and common pitfalls.
+**Start with [basics.md](basics.md)** — it covers modes, imports, functions, control flow, and common pitfalls. For data types and operators, see [types.md](types.md).
 
 ## Developing Packages and Templates
 
@@ -53,7 +54,7 @@ Content goes here.
 | Debug output (pdftotext, repr, measure)   | [debug.md](debug.md)       |
 | Profile performance (--timings, hotspots) | [perf.md](perf.md)         |
 
-[basics.md](basics.md) is also the foundation for developers.
+[basics.md](basics.md) and [types.md](types.md) are also the foundation for developers.
 
 ## Finding Packages
 
@@ -75,19 +76,25 @@ python3 scripts/search-packages.py --list-categories
 
 ## Common Errors
 
-| Error                                  | Cause                | Fix                                       |
-| -------------------------------------- | -------------------- | ----------------------------------------- |
-| "unknown variable"                     | Undefined identifier | Check spelling, ensure `#let` before use  |
-| "expected X, found Y"                  | Type mismatch        | Check function signature in docs          |
-| "file not found"                       | Bad import path      | Paths resolve relative to current file    |
-| "unknown font"                         | Font not installed   | Use system fonts or web-safe alternatives |
-| "maximum function call depth exceeded" | Deep recursion       | Use iteration instead                     |
+| Error                                            | Cause                        | Fix                                                  |
+| ------------------------------------------------ | ---------------------------- | ---------------------------------------------------- |
+| "unknown variable"                               | Undefined identifier         | Check spelling, ensure `#let` before use             |
+| "expected X, found Y"                            | Type mismatch                | Check function signature in docs                     |
+| "file not found"                                 | Bad import path              | Paths resolve relative to current file               |
+| "unknown font"                                   | Font not installed           | Use system fonts or web-safe alternatives            |
+| "maximum function call depth exceeded"           | Deep recursion               | Use iteration instead                                |
+| "can only be used when context is known"         | Missing `context` wrapper    | Wrap in `context { ... }`                            |
+| "unexpected argument"                            | `=` instead of `:` for args  | Named args use `:` syntax: `func(name: value)`       |
+| "variables from outside are read-only"           | Mutating captured variable   | Use loop accumulation or `state()` — see advanced.md |
+| "expected content, found string" (or vice versa) | Content/string type mismatch | Use `[#str-var]` to embed string in content          |
+| set/show rule has no effect                      | Rule placed after content    | Place set/show rules before the content they target  |
 
 ## Examples
 
 | Example                                             | Description                                          |
 | --------------------------------------------------- | ---------------------------------------------------- |
 | [basic-document.typ](examples/basic-document.typ)   | Complete beginner document with all common elements  |
+| [styled-document.typ](examples/styled-document.typ) | Set/show rules, page layout, multi-region document   |
 | [template-report.typ](examples/template-report.typ) | Reusable template with headers, counters, note boxes |
 | [package-example/](examples/package-example/)       | Minimal publishable package with submodules          |
 

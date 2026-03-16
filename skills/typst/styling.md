@@ -1,6 +1,6 @@
 # Styling and Layout
 
-For language basics (syntax, types, functions), see [basics.md](basics.md). For reusable template creation, see [template.md](template.md).
+For language basics (syntax, functions), see [basics.md](basics.md). For data types and operators, see [types.md](types.md). For reusable template creation, see [template.md](template.md).
 
 ## Set Rules
 
@@ -63,9 +63,7 @@ Transform how elements are rendered.
 #pagebreak(to: "odd")     // Break to next odd page
 ```
 
-## Counters
-
-### Built-in Counters
+## Built-in Counters
 
 ```typst
 #context counter(page).display()    // Current page
@@ -73,31 +71,7 @@ Transform how elements are rendered.
 #context counter(heading).display() // Heading number
 ```
 
-### Custom Counters
-
-```typst
-#let example-counter = counter("example")
-
-#let example(body) = {
-  example-counter.step()
-  block[*Example #context example-counter.display():* #body]
-}
-```
-
-### State for Headers
-
-```typst
-#let chapter-title = state("chapter", none)
-
-#show heading.where(level: 1): it => {
-  chapter-title.update(it.body)
-  it
-}
-
-#set page(header: context { chapter-title.get() })
-```
-
-For advanced state/context patterns, see [advanced.md](advanced.md).
+For custom counters and state tracking, see [advanced.md](advanced.md).
 
 ## Heading Customization
 
@@ -119,13 +93,9 @@ For advanced state/context patterns, see [advanced.md](advanced.md).
 
 ```typst
 #set figure(numbering: "1")
-
-// Per-chapter numbering
-#set figure(numbering: num => context {
-  let ch = counter(heading.where(level: 1)).get().first()
-  [#ch.#num]
-})
 ```
+
+For per-chapter numbering, see [template.md](template.md).
 
 ## Labels and References
 
@@ -148,16 +118,7 @@ For advanced state/context patterns, see [advanced.md](advanced.md).
 #link(label("ref-" + key))[See here]
 ```
 
-### Querying Labels
-
-```typst
-#context {
-  let target = query(label("ref-mykey"))
-  if target.len() > 0 {
-    [Found at page #target.first().location().page()]
-  }
-}
-```
+To query labels programmatically, see the Query System in [advanced.md](advanced.md).
 
 ## Multi-Region Documents
 
