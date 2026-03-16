@@ -38,17 +38,18 @@ pdftotext /tmp/hello.pdf - | head -20
 
 ## Contents
 
-| File            | Description                                  |
-| --------------- | -------------------------------------------- |
-| `SKILL.md`      | Main entry point with quick reference        |
-| `basics.md`     | Language fundamentals, types, imports, paths |
-| `advanced.md`   | State, context, query, XML parsing           |
-| `template.md`   | Template development, set/show rules         |
-| `package.md`    | Package development and publishing           |
-| `conversion.md` | Markdown/LaTeX to Typst conversion           |
-| `debug.md`      | Debugging techniques for agents              |
-| `perf.md`       | Performance profiling and timings            |
-| `examples/`     | Runnable examples (including perf test)      |
+| File            | Audience   | Description                                  |
+| --------------- | ---------- | -------------------------------------------- |
+| `SKILL.md`      | Both       | Main entry point with quick reference        |
+| `basics.md`     | Both       | Language fundamentals, types, imports, paths |
+| `styling.md`    | Users      | Set/show rules, page layout, figures, labels |
+| `conversion.md` | Users      | Markdown/LaTeX to Typst conversion           |
+| `advanced.md`   | Developers | State, context, query, XML parsing           |
+| `template.md`   | Developers | Reusable template function patterns          |
+| `package.md`    | Developers | Package development and publishing           |
+| `debug.md`      | Developers | Debugging techniques for agents              |
+| `perf.md`       | Developers | Performance profiling and timings            |
+| `examples/`     | Both       | Runnable examples (including perf test)      |
 
 ## Usage
 

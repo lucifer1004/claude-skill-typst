@@ -1,6 +1,6 @@
 # Advanced Typst Patterns
 
-For language basics (types, operators, string/array/dict operations), see [basics.md](basics.md).
+For language basics (types, operators, string/array/dict operations), see [basics.md](basics.md). For labels, references, and everyday styling, see [styling.md](styling.md).
 
 ## XML Parsing
 
@@ -158,38 +158,6 @@ Query finds elements in the document. Requires `context`.
 }
 ```
 
-## Labels and References
-
-### Creating Labels
-
-```typst
-= Introduction <intro>
-
-#figure(image("fig.png"), caption: [A figure]) <fig:main>
-```
-
-### Programmatic Labels
-
-```typst
-// Create label from string
-#let key = "my-key"
-#[Some content #label("ref-" + key)]
-
-// Reference with link
-#link(label("ref-" + key))[See here]
-```
-
-### Querying Labels
-
-```typst
-#context {
-  let target = query(label("ref-mykey"))
-  if target.len() > 0 {
-    [Found at page #target.first().location().page()]
-  }
-}
-```
-
 ## Working Around Closure Limitations
 
 Closures cannot mutate captured variables. Use these patterns:
@@ -260,9 +228,9 @@ Closures cannot mutate captured variables. Use these patterns:
 ## Performance Tips
 
 1. **Precompute at document end**: Use `context` with `query()` and `.final()` to compute once
-1. **Avoid deep recursion**: Typst has function call depth limits (~256)
-1. **Cache expensive operations**: Store in state, compute once
-1. **Use `.at(key, default: x)` instead of checking then accessing**
+2. **Avoid deep recursion**: Typst has function call depth limits (~256)
+3. **Cache expensive operations**: Store in state, compute once
+4. **Use `.at(key, default: x)` instead of checking then accessing**
 
 ```typst
 // ❌ Slower

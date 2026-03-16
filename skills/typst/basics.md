@@ -82,7 +82,7 @@ The answer is #(1 + 2).
 The project root controls:
 
 1. Where `/`-prefixed paths resolve from
-1. Security boundary (files outside root cannot be accessed)
+2. Security boundary (files outside root cannot be accessed)
 
 ```bash
 # Default: root is the main file's directory

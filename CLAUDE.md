@@ -25,8 +25,8 @@ repo root (NOT bundled)               skills/typst/ (bundled skill)
 `SKILL.md` is the single entry point. It contains:
 
 1. Detection patterns and quick reference
-1. A table routing agents to the right `*.md` file by task
-1. "When to use each reference" section with short descriptions
+2. Two routing tables — **Writing Documents** (user-facing) and **Developing Packages and Templates** (developer-facing) — that direct agents to the right `*.md` file by task
+3. Package search, common errors, and examples
 
 **Every new `.md` file or capability MUST be registered in `SKILL.md`'s routing table.**
 If it's not in the table, agents won't find it. Dead content is worse than no content.
@@ -36,26 +36,26 @@ If it's not in the table, agents won't find it. Dead content is worse than no co
 ### New Reference Doc (e.g., `charts.md`)
 
 1. Create `skills/typst/charts.md`
-1. Start with a one-line cross-reference: `For language basics, see [basics.md](basics.md).`
-1. Add an entry to the "Quick Reference" table in `SKILL.md`
-1. Add a "When to Use" subsection in `SKILL.md` (2-4 bullet points)
-1. If the doc references runnable examples, put them in `examples/`
+2. Start with a one-line cross-reference: `For language basics, see [basics.md](basics.md).`
+3. Add an entry to the "Quick Reference" table in `SKILL.md`
+4. Add a "When to Use" subsection in `SKILL.md` (2-4 bullet points)
+5. If the doc references runnable examples, put them in `examples/`
 
 ### New Script (e.g., `scripts/search-packages.py`)
 
 1. Place under `skills/typst/scripts/` (not `examples/` — scripts are tools, examples are demos)
-1. Must be self-contained: stdlib-only or with clear dep instructions
-1. Must have `--help` with usage examples
-1. Must work without network access where possible (prefer embedded data over API calls)
-1. Reference the script from the relevant `.md` doc AND from `SKILL.md`
+2. Must be self-contained: stdlib-only or with clear dep instructions
+3. Must have `--help` with usage examples
+4. Must work without network access where possible (prefer embedded data over API calls)
+5. Reference the script from the relevant `.md` doc AND from `SKILL.md`
 
 ### New Embedded Data (e.g., `data/packages.json`)
 
 1. Place under `skills/typst/data/`
-1. Include a generation script under `tools/` at the repo root (NOT in the bundle)
-1. Document the data schema in the generation script
-1. Keep file sizes reasonable — agents load these into context
-1. Add a CI workflow in `.github/workflows/` to refresh the data on a cron schedule
+2. Include a generation script under `tools/` at the repo root (NOT in the bundle)
+3. Document the data schema in the generation script
+4. Keep file sizes reasonable — agents load these into context
+5. Add a CI workflow in `.github/workflows/` to refresh the data on a cron schedule
 
 ## Writing Standards
 

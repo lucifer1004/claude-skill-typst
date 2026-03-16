@@ -33,19 +33,27 @@ typst compile document.typ && pdftotext document.pdf - | head -20
 Content goes here.
 ```
 
-## Reference Docs
+## Writing Documents
 
 | When you need to...                           | Read                           |
 | --------------------------------------------- | ------------------------------ |
 | Learn syntax, types, imports, path resolution | [basics.md](basics.md)         |
-| Use state, context, query, or parse XML       | [advanced.md](advanced.md)     |
-| Build templates with set/show rules           | [template.md](template.md)     |
-| Create or publish a package                   | [package.md](package.md)       |
+| Style pages, headings, figures, layout        | [styling.md](styling.md)       |
 | Convert from Markdown or LaTeX                | [conversion.md](conversion.md) |
-| Debug output (pdftotext, repr, measure)       | [debug.md](debug.md)           |
-| Profile performance (--timings, hotspots)     | [perf.md](perf.md)             |
 
 **Start with [basics.md](basics.md)** — it covers modes, imports, data types, functions, and common pitfalls.
+
+## Developing Packages and Templates
+
+| When you need to...                       | Read                       |
+| ----------------------------------------- | -------------------------- |
+| Use state, context, query, or parse XML   | [advanced.md](advanced.md) |
+| Create a reusable template function       | [template.md](template.md) |
+| Create or publish a package               | [package.md](package.md)   |
+| Debug output (pdftotext, repr, measure)   | [debug.md](debug.md)       |
+| Profile performance (--timings, hotspots) | [perf.md](perf.md)         |
+
+[basics.md](basics.md) is also the foundation for developers.
 
 ## Finding Packages
 
