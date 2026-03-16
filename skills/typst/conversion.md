@@ -55,6 +55,7 @@ Or functional syntax:
 #link("https://example.com")[Click here]
 
 // Internal reference
+#set heading(numbering: "1.")
 See @introduction for details.
 = Introduction <introduction>
 

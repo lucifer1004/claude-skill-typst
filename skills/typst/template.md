@@ -10,7 +10,10 @@ A template wraps content with styling and layout:
 
 ```typst
 #let template(title: none, author: none, body) = {
-  set document(title: title, author: author)
+  set document(
+    title: if title != none { title } else { "" },
+    author: if author != none { (author,) } else { () },
+  )
   set page(paper: "a4", margin: 2cm)
   set text(font: "Libertinus Serif", size: 11pt)
   body

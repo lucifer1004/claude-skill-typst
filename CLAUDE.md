@@ -87,15 +87,19 @@ Before committing, verify:
 ```bash
 # All .typ examples compile
 for f in skills/typst/examples/*.typ; do
-  typst compile "$f" /dev/null && echo "OK: $f" || echo "FAIL: $f"
+  typst compile "$f" /dev/null -f pdf && echo "OK: $f" || echo "FAIL: $f"
 done
 
 # Package example compiles
-typst compile skills/typst/examples/package-example/lib.typ /dev/null
+typst compile skills/typst/examples/package-example/lib.typ /dev/null -f pdf
+
+# Inline code blocks in .md docs compile (requires markdown-it-py)
+pixi run python3 skills/typst/scripts/validate-examples.py
 
 # Python scripts have valid syntax
 python3 -m py_compile skills/typst/examples/perf-timings.py
 python3 -m py_compile skills/typst/scripts/search-packages.py
+python3 -m py_compile skills/typst/scripts/validate-examples.py
 
 # Package search works
 python3 skills/typst/scripts/search-packages.py "chart" --top 3

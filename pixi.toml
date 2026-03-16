@@ -2,7 +2,7 @@
 authors = ["Zihua Wu <13583761+lucifer1004@users.noreply.github.com>"]
 channels = ["conda-forge"]
 name = "claude-skill-typst"
-platforms = ["linux-64"]
+platforms = ["linux-64", "osx-arm64"]
 version = "0.1.0"
 
 [tasks]
@@ -14,3 +14,5 @@ search = "python skills/typst/scripts/search-packages.py"
 python = ">=3.10"
 pytest = ">=9"
 prek = ">=0.3"
+markdown-it-py = ">=4.0.0,<5"
+typst = ">=0.14.2,<0.15"

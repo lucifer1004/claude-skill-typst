@@ -105,8 +105,9 @@ State allows tracking information across a document. Requires `context` to read.
 
 ```typst
 // Get final value (at document end)
+#let my-counter = state("my-counter", 0)
 #context {
-  let final-count = counter.final()
+  let final-count = my-counter.final()
   [Total: #final-count]
 }
 ```

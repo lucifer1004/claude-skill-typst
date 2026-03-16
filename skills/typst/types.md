@@ -77,7 +77,7 @@ For syntax, imports, functions, and control flow, see [basics.md](basics.md).
 #arr.filter(x => x > 1) // (2, 3)
 #arr.find(x => x > 1)   // 2 (first match)
 #arr.fold(0, (a, x) => a + x)  // 6
-#arr.join(", ")         // "1, 2, 3"
+#arr.map(str).join(", ")  // "1, 2, 3"
 #arr.sorted()           // Sorted copy
 #arr.sorted(key: x => -x)  // (3, 2, 1) descending
 #arr.rev()              // Reversed
