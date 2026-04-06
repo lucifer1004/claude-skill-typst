@@ -109,4 +109,4 @@ python3 scripts/search-packages.py --list-categories
   - Linux: `cargo install typst-cli`
   - Windows: `winget install typst`
 - **pdftotext** (optional): For text-level output verification
-- **Python 3.8+** (optional): For package search script
+- **Python 3.10+** (optional): For package search and validation scripts

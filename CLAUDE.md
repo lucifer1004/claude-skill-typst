@@ -2,8 +2,8 @@
 
 ## What This Is
 
-A Claude Code / Cursor skill that teaches AI agents how to work with Typst.
-Everything lives under `skills/typst/`. The root `README.md` is for humans browsing GitHub.
+A skill that teaches AI agents how to work with Typst.
+Everything agent-facing lives under `skills/typst/`. The root `README.md` is for humans browsing GitHub, and `skills/typst/` should not contain a separate human-facing `README.md`.
 
 ## Project Structure
 
@@ -32,6 +32,7 @@ repo root (NOT bundled)               skills/typst/ (bundled skill)
 
 **Every new `.md` file or capability MUST be registered in `SKILL.md`'s routing table.**
 If it's not in the table, agents won't find it. Dead content is worse than no content.
+This is enforced by `tests/test_structure.py`.
 
 ## Adding New Content
 
@@ -105,6 +106,9 @@ python3 -m py_compile skills/typst/scripts/validate-examples.py
 
 # Package search works
 python3 skills/typst/scripts/search-packages.py "chart" --top 3
+
+# Bundled docs are all routed from SKILL.md
+pytest tests/test_structure.py -v
 ```
 
 ## Planned Capabilities
