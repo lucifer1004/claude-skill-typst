@@ -22,7 +22,9 @@ def _bundled_markdown_docs():
 
 def _linked_markdown_docs():
     text = SKILL_FILE.read_text(encoding="utf-8")
-    return {Path(target).name for target in re.findall(r"\[[^\]]+\]\(([^)#]+\.md)\)", text)}
+    return {
+        Path(target).name for target in re.findall(r"\[[^\]]+\]\(([^)#]+\.md)\)", text)
+    }
 
 
 def test_bundled_skill_has_no_readme():
