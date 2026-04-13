@@ -14,6 +14,7 @@ typst compile document.typ              # compile once
 typst compile document.typ output.pdf   # explicit output path
 typst compile src/main.typ --root .     # set project root for /path imports
 typst watch document.typ                # recompile on change
+typst query document.typ "<label>"      # extract metadata as JSON (see query.md)
 ```
 
 Agents cannot preview PDFs. Verify via exit code and `pdftotext`:
@@ -43,6 +44,7 @@ Content goes here.
 | Tables, grids, cell spans, borders, data tables    | [tables.md](tables.md)         |
 | Academic papers, bibliography, theorems, equations | [academic.md](academic.md)     |
 | Convert from Markdown or LaTeX                     | [conversion.md](conversion.md) |
+| Extract data from documents, multi-pass builds     | [query.md](query.md)           |
 
 **Start with [basics.md](basics.md)** — it covers modes, imports, functions, control flow, and common pitfalls. For data types and operators, see [types.md](types.md).
 
@@ -51,6 +53,7 @@ Content goes here.
 | When you need to...                       | Read                       |
 | ----------------------------------------- | -------------------------- |
 | Use state, context, query, or parse XML   | [advanced.md](advanced.md) |
+| CLI query, metadata export, multi-pass    | [query.md](query.md)       |
 | Create a reusable template function       | [template.md](template.md) |
 | Create or publish a package               | [package.md](package.md)   |
 | Debug output (pdftotext, repr, measure)   | [debug.md](debug.md)       |
@@ -100,6 +103,7 @@ python3 scripts/search-packages.py --list-categories
 | [template-report.typ](examples/template-report.typ) | Reusable template with headers, counters, note boxes |
 | [tables-showcase.typ](examples/tables-showcase.typ) | Table features: spans, stripes, grids, data gen      |
 | [academic-paper.typ](examples/academic-paper.typ)   | Paper with theorems, equations, bibliography layout  |
+| [query-export.typ](examples/query-export.typ)       | Metadata export for `typst query` CLI + multi-pass   |
 | [package-example/](examples/package-example/)       | Minimal publishable package with submodules          |
 
 ## Dependencies
@@ -110,3 +114,4 @@ python3 scripts/search-packages.py --list-categories
   - Windows: `winget install typst`
 - **pdftotext** (optional): For text-level output verification
 - **Python 3.10+** (optional): For package search and validation scripts
+- **jq** (optional): For parsing JSON output from `typst query` in shell scripts

@@ -1,7 +1,24 @@
-__pycache__
-# pixi environments
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Tooling caches
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+
+# pixi
 .pixi/*
 !.pixi/config.toml
-.ruff_cache
-.pytest_cache
+
+# AI agents
 .claude/settings.local.json
+.omc/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Typst build artifacts
+*.pdf
