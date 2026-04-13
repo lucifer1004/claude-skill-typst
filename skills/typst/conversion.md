@@ -266,111 +266,30 @@ Some *bold* and _italic_ text.
 
 ## Using Pandoc for Conversion
 
-Pandoc (since v2.18) supports Typst as an output format, enabling automated conversion from Markdown, LaTeX, and other formats.
-
-### Basic Commands
+Pandoc (since v2.18) supports Typst as an output format.
 
 ```bash
-# Markdown to Typst
-pandoc -f markdown -t typst input.md -o output.typ
-
-# LaTeX to Typst
-pandoc -f latex -t typst input.tex -o output.typ
-
-# Multiple formats to Typst
-pandoc input.md input2.md -t typst -o combined.typ
-
-# Markdown to PDF via Typst
-pandoc input.md -o output.pdf --pdf-engine=typst
+pandoc -f markdown -t typst input.md -o output.typ    # Markdown → Typst
+pandoc -f latex -t typst input.tex -o output.typ       # LaTeX → Typst
+pandoc input.md -o output.pdf --pdf-engine=typst        # Markdown → PDF via Typst
 ```
 
-### Metadata Variables
-
-Control output via YAML frontmatter or command-line `-V`:
-
-```yaml
----
-title: "Document Title"
-author: "Author Name"
-date: "2026-01-01"
-papersize: a4
-margin:
-  x: 2cm
-  y: 2.5cm
-fontsize: 11pt
-mainfont: "Libertinus Serif"
-mathfont: "Libertinus Math"
-codefont: "Fira Code"
-section-numbering: "1.1"
-page-numbering: "1"
-columns: 1
-linestretch: 1.25
-linkcolor: "4183c4"
----
-```
-
-Or via command line:
+### Common Options
 
 ```bash
 pandoc input.md -t typst -o output.typ \
-  -V papersize=a4 \
-  -V fontsize=12pt \
-  -V mainfont="Times New Roman"
+  -V papersize=a4 -V fontsize=12pt -V mainfont="Libertinus Serif" \
+  -V section-numbering="1.1" --toc
 ```
 
-All variables shown in the YAML example above (`title`, `author`, `papersize`, `margin`, `fontsize`, `mainfont`/`mathfont`/`codefont`, `section-numbering`, `page-numbering`, `columns`, `linestretch`, `linkcolor`, `citecolor`) can also be set via `-V key=value`.
+Key `-V` variables: `title`, `author`, `papersize`, `margin`, `fontsize`, `mainfont`/`mathfont`/`codefont`, `section-numbering`, `page-numbering`, `columns`, `linestretch`, `linkcolor`. These can also be set via YAML frontmatter.
 
-### Custom Templates
-
-Extract and modify the default template:
-
-```bash
-# Get default template
-pandoc -D typst > my-template.typ
-
-# Use custom template
-pandoc input.md -t typst --template=my-template.typ -o output.typ
-```
-
-### Direct PDF Generation
-
-```bash
-# Basic PDF via Typst
-pandoc input.md -o output.pdf --pdf-engine=typst
-
-# With PDF/A-2b compliance (Typst 0.12+)
-pandoc input.md -o output.pdf --pdf-engine=typst \
-  --pdf-engine-opt=--pdf-standard=a-2b
-```
+Custom templates: `pandoc -D typst > template.typ`, then `pandoc input.md --template=template.typ -o output.typ`.
 
 ### Known Limitations
 
-1. **Citation handling**: `@ref` in Markdown becomes `#cite(<ref>)` in Typst. Escape with `\@` if literal `@` needed.
+- **Citations**: `@ref` in Markdown → `#cite(<ref>)` in Typst. Escape literal `@` with `\@`.
+- **Complex tables**: Cell merging needs manual adjustment.
+- **Raw Typst blocks**: Use ```` ```{=typst} ```` fenced blocks for unsupported features.
 
-2. **Image sizing**: Default image dimensions may differ from other outputs. Specify width explicitly:
-
-   ```markdown
-   ![Alt text](image.png){width=80%}
-   ```
-
-3. **Complex tables**: Cell merging and advanced table features may need manual adjustment.
-
-4. **Raw blocks**: Use raw Typst blocks for unsupported features:
-
-   ````markdown
-   ```{=typst}
-   #set text(fill: red)
-   Custom Typst code here.
-   ```
-   ````
-
-### Workflow
-
-```bash
-pandoc document.md -t typst -o document.typ \
-  -V papersize=a4 -V mainfont="Libertinus Serif" \
-  -V section-numbering="1.1" --toc
-typst compile document.typ
-```
-
-Review and refine Pandoc output for complex documents — cell merging, custom styling, and advanced layout usually need manual adjustment.
+Review and refine Pandoc output — custom styling and advanced layout usually need manual adjustment.

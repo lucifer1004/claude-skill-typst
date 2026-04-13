@@ -343,4 +343,4 @@ Functions without explicit return value return `none`:
 
 ## Error Handling
 
-Use `assert(condition, message: "...")` for preconditions and `panic("...")` for unreachable states.
+Use `assert(condition, message: "...")` for preconditions and `panic("...")` for unreachable states. For assertion patterns and debug techniques, see [debug.md](debug.md).

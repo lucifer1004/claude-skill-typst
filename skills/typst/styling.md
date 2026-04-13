@@ -89,6 +89,40 @@ For custom counters and state tracking, see [advanced.md](advanced.md).
 #outline(title: [Contents], indent: auto, depth: 3)
 ```
 
+## Images
+
+```typst
+#image("diagram.png")                    // Full width
+#image("diagram.png", width: 80%)        // Scaled
+#image("photo.jpg", width: 5cm, height: 4cm, fit: "cover")  // Crop to fit
+#image("icon.svg")                       // SVG supported natively
+```
+
+Paths resolve relative to the current file (see [basics.md](basics.md) for path rules).
+
+Prefer SVG for diagrams (scales cleanly), PNG/JPG for photos. Use `fit: "contain"` (default) to preserve aspect ratio, `"cover"` to crop, `"stretch"` to distort.
+
+## Font Configuration
+
+```typst
+#set text(font: "Libertinus Serif")                     // Single font
+#set text(font: ("Noto Serif CJK SC", "Libertinus Serif"))  // Fallback chain
+#set text(font: "Fira Code", size: 9pt)                 // Monospace for code
+```
+
+```bash
+# List available fonts
+typst fonts
+
+# Search for a font
+typst fonts | grep -i "noto"
+
+# Add font directory
+typst compile document.typ --font-path ./fonts
+```
+
+If `typst fonts` does not list the font you need, install it system-wide or use `--font-path` to point to a directory containing `.ttf`/`.otf` files.
+
 ## Figure Customization
 
 ```typst

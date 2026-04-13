@@ -125,6 +125,39 @@ For syntax, imports, functions, and control flow, see [basics.md](basics.md).
 // Most functions return content
 ```
 
+## Colors
+
+```typst
+#rgb("#4183c4")          // Hex color
+#rgb(65, 131, 196)       // RGB 0-255
+#luma(240)               // Grayscale 0-255 (0=black, 255=white)
+#color.hsl(210deg, 50%, 50%)  // HSL
+
+// Modify colors
+#blue.lighten(80%)       // Lighter blue
+#red.darken(30%)         // Darker red
+#green.transparentize(50%)  // Semi-transparent
+
+// Usage
+#set text(fill: rgb("#333"))
+#rect(fill: blue.lighten(90%), stroke: blue)
+```
+
+## Datetime
+
+```typst
+#datetime.today()                        // Current date
+#datetime(year: 2026, month: 4, day: 13) // Specific date
+#datetime.today().display()              // Default format
+#datetime.today().display("[month repr:long] [day], [year]")  // "April 13, 2026"
+
+// Fields
+#let d = datetime.today()
+#d.year()   // 2026
+#d.month()  // 4
+#d.day()    // 13
+```
+
 ## Operators
 
 ### Arithmetic

@@ -8,30 +8,23 @@ Agents cannot preview PDFs directly. Use these techniques to verify output.
 
 ## Text Content Verification
 
-Use `pdftotext` to extract and verify generated text:
+Use HTML export for structured output (headings → `<h2>`, tables → `<table>`, figures → `<figure>`):
 
 ```bash
-# Compile and extract text
-typst compile document.typ && pdftotext document.pdf - | head -50
+# Primary: HTML export with semantic tags
+typst compile document.typ /dev/stdout -f html --features html 2>/dev/null
 
-# Check specific content exists
-typst compile document.typ && pdftotext document.pdf - | grep -i "expected text"
+# Check specific content
+typst compile document.typ /dev/stdout -f html --features html 2>/dev/null | grep -i "expected text"
 
-# Compare output structure
-typst compile document.typ && pdftotext document.pdf - > output.txt
+# Verify headings
+typst compile document.typ /dev/stdout -f html --features html 2>/dev/null | grep "<h[1-6]>"
 ```
 
-### Common Checks
+HTML export is experimental and ignores page-specific features (headers, footers, page numbers). Fallback to `pdftotext` for those:
 
 ```bash
-# Verify headings rendered correctly
-pdftotext document.pdf - | grep -E "^(Chapter|Section|[0-9]+\.)"
-
-# Check page count (rough estimate via form feeds)
-pdftotext document.pdf - | grep -c $'\f'
-
-# Verify table content
-pdftotext document.pdf - | grep -A5 "Table Header"
+typst compile document.typ && pdftotext document.pdf -
 ```
 
 ## Object Inspection with repr

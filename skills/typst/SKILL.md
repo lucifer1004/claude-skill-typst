@@ -17,10 +17,16 @@ typst watch document.typ                # recompile on change
 typst query document.typ "<label>"      # extract metadata as JSON (see query.md)
 ```
 
-Agents cannot preview PDFs. Verify via exit code and `pdftotext`:
+Agents cannot preview PDFs. Verify via HTML export (structured, semantic tags):
 
 ```bash
-typst compile document.typ && pdftotext document.pdf - | head -20
+typst compile document.typ /dev/stdout -f html --features html 2>/dev/null
+```
+
+Fallback if HTML export fails (e.g., page-specific features):
+
+```bash
+typst compile document.typ && pdftotext document.pdf -
 ```
 
 ## Minimal Document
@@ -50,14 +56,14 @@ Content goes here.
 
 ## Developing Packages and Templates
 
-| When you need to...                       | Read                       |
-| ----------------------------------------- | -------------------------- |
-| Use state, context, query, or parse XML   | [advanced.md](advanced.md) |
-| CLI query, metadata export, multi-pass    | [query.md](query.md)       |
-| Create a reusable template function       | [template.md](template.md) |
-| Create or publish a package               | [package.md](package.md)   |
-| Debug output (pdftotext, repr, measure)   | [debug.md](debug.md)       |
-| Profile performance (--timings, hotspots) | [perf.md](perf.md)         |
+| When you need to...                         | Read                       |
+| ------------------------------------------- | -------------------------- |
+| State, counters, in-document `query()`, XML | [advanced.md](advanced.md) |
+| CLI query, metadata export, multi-pass      | [query.md](query.md)       |
+| Create a reusable template function         | [template.md](template.md) |
+| Create or publish a package                 | [package.md](package.md)   |
+| Debug output (pdftotext, repr, measure)     | [debug.md](debug.md)       |
+| Profile performance (--timings, hotspots)   | [perf.md](perf.md)         |
 
 [basics.md](basics.md) and [types.md](types.md) are also the foundation for developers.
 

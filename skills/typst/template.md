@@ -127,10 +127,10 @@ For detailed query and state patterns, see [advanced.md](advanced.md).
 
 2. **Test edge cases**: Empty body, very long titles, single-page vs multi-page
 
-3. **Verify text output**: Use `pdftotext` since agents cannot preview PDFs
+3. **Verify text output**: Use HTML export since agents cannot preview PDFs
 
    ```bash
-   typst compile test.typ && pdftotext test.pdf - | head -20
+   typst compile test.typ /dev/stdout -f html --features html 2>/dev/null
    ```
 
 4. **Check with debug tools**: See [debug.md](debug.md) for `repr()`, `measure()`, and visual boundary helpers
