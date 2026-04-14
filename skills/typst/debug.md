@@ -2,26 +2,41 @@
 
 For language basics, see [basics.md](basics.md). For type inspection (`type()`, `repr()`), see [types.md](types.md). For state/context debugging, see [advanced.md](advanced.md).
 
-## Agent Workflow
+## Agent Verification Methods
 
-Agents cannot preview PDFs directly. Use these techniques to verify output.
+Agents cannot preview PDFs directly. Three methods, choose by what you need to check:
 
-## Text Content Verification
+### HTML Export — Text and Structure
 
-Use HTML export for structured output (headings → `<h2>`, tables → `<table>`, figures → `<figure>`):
+Outputs semantic HTML (headings → `<h2>`, tables → `<table>`, figures → `<figure>`). Best for verifying content, structure, and data correctness.
 
 ```bash
-# Primary: HTML export with semantic tags
 typst compile document.typ /dev/stdout -f html --features html 2>/dev/null
-
-# Check specific content
 typst compile document.typ /dev/stdout -f html --features html 2>/dev/null | grep -i "expected text"
-
-# Verify headings
-typst compile document.typ /dev/stdout -f html --features html 2>/dev/null | grep "<h[1-6]>"
 ```
 
-HTML export is experimental and ignores page-specific features (headers, footers, page numbers). Fallback to `pdftotext` for those:
+HTML export is experimental and ignores page-specific features (headers, footers, page numbers).
+
+### PNG Export — Visual Layout
+
+Exports rendered pages as images. Use when layout matters — alignment, spacing, font rendering, page breaks, multi-column, headers/footers. Requires a multimodal agent.
+
+```bash
+# Export all pages ({p} = page number, required for multi-page documents)
+typst compile document.typ "page-{p}.png" -f png
+
+# Export specific pages only
+typst compile document.typ "page-{p}.png" -f png --pages 1-3
+
+# Higher resolution (default: 144 PPI)
+typst compile document.typ "page-{p}.png" -f png --ppi 288
+```
+
+Then read the PNG file(s) to visually inspect the rendered output.
+
+### pdftotext — Fallback
+
+Plain text extraction. Use when HTML export fails or for quick page-count checks.
 
 ```bash
 typst compile document.typ && pdftotext document.pdf -

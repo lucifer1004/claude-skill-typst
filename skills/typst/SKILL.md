@@ -10,24 +10,21 @@ Modern typesetting system — simpler than LaTeX, faster compilation, programmab
 ## Compilation
 
 ```bash
-typst compile document.typ              # compile once
+typst compile document.typ              # compile once → PDF
 typst compile document.typ output.pdf   # explicit output path
+typst compile document.typ -f png       # export as PNG image
 typst compile src/main.typ --root .     # set project root for /path imports
 typst watch document.typ                # recompile on change
 typst query document.typ "<label>"      # extract metadata as JSON (see query.md)
 ```
 
-Agents cannot preview PDFs. Verify via HTML export (structured, semantic tags):
+Agent verification — choose by what you need to check (see [debug.md](debug.md) for details):
 
-```bash
-typst compile document.typ /dev/stdout -f html --features html 2>/dev/null
-```
-
-Fallback if HTML export fails (e.g., page-specific features):
-
-```bash
-typst compile document.typ && pdftotext document.pdf -
-```
+| Method      | Command                                                                 | Best for                                  |
+| ----------- | ----------------------------------------------------------------------- | ----------------------------------------- |
+| HTML export | `typst compile doc.typ /dev/stdout -f html --features html 2>/dev/null` | Text content, structure, headings, tables |
+| PNG export  | `typst compile doc.typ page-{p}.png -f png`                             | Visual layout, alignment, spacing, fonts  |
+| pdftotext   | `typst compile doc.typ && pdftotext doc.pdf -`                          | Fallback for page-specific content        |
 
 ## Minimal Document
 
