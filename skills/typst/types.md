@@ -15,26 +15,36 @@ For syntax, imports, functions, and control flow, see [basics.md](basics.md).
 ## Strings
 
 ```typst
-#let s = "hello"
-#s.len()             // 5
+#let s = "hello world"
+#s.len()             // 11
 #s.at(0)             // "h"
+#s.first()           // "h"
+#s.last()            // "d"
 #s.contains("ell")   // true
-#s.replace("l", "L") // "heLLo"
-#s.split(" ")        // Array of words
-#upper(s)            // "HELLO"
+#s.replace("l", "L") // "heLLo worLd"
+#s.split(" ")        // ("hello", "world")
+#upper(s)            // "HELLO WORLD"
 #lower("ABC")        // "abc"
+
+// Search and position
+#s.position("world")    // 6 (byte index, or none if not found)
+#s.starts-with("he")    // true
+#s.ends-with("lo")      // false
+
+// Slicing
+#s.slice(0, 5)          // "hello"
+#s.slice(6)             // "world"
 
 // Trimming
 #"  text  ".trim()           // "text"
 #"  text  ".trim(at: start)  // "text  "
 #"  text  ".trim(at: end)    // "  text"
 
-// Checking
-#s.starts-with("he")  // true
-#s.ends-with("lo")    // true
-
-// Split to chars
-#"abc".split("")      // ("a", "b", "c")
+// Characters
+#"café".clusters()       // ("c", "a", "f", "é") — grapheme clusters
+#"abc".rev()             // "cba"
+#str.to-unicode("A")     // 65
+#str.from-unicode(65)    // "A"
 ```
 
 ## Regex

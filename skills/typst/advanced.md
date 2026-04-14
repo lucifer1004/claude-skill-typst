@@ -223,4 +223,124 @@ Closures cannot mutate captured variables (see basics.md "Mutability in Closures
 }
 ```
 
+## Content Introspection
+
+Content elements (headings, text, figures, etc.) can be inspected and decomposed programmatically. This is essential for advanced show rules and template development.
+
+### Core Methods
+
+```typst
+= Hello *World*
+
+// func() — the element's constructor (for type comparison)
+#context {
+  let h = query(heading).first()
+  let is-heading = h.func() == heading   // true
+  let is-text = h.func() == text         // false
+}
+
+// fields() — dictionary of all field values
+#context {
+  let h = query(heading).first()
+  let f = h.fields()
+  // f.keys() → ("level", "depth", "offset", "numbering", "supplement",
+  //             "outlined", "bookmarked", "hanging-indent", "body")
+}
+
+// has() / at() — check and access fields
+#context {
+  let h = query(heading).first()
+  let has-body = h.has("body")     // true
+  let level = h.at("level")        // 1
+}
+```
+
+### Content Tree Structure
+
+Content is a tree. Compound elements have `children`; leaf elements have `text`. Whitespace is a separate `space` node:
+
+```typst
+// [Hello *World*] decomposes to:
+// sequence
+//   ├── text("Hello")
+//   ├── space
+//   └── strong
+//       └── text("World")
+
+// Access children via fields()
+#let body = [Hello *World*]
+#let f = body.fields()
+// "children" in f → true
+// f.children → (text("Hello"), space, strong(...))
+```
+
+### Show Rule Decomposition Pattern
+
+Intercept an element, decompose its content, transform parts, reassemble:
+
+```typst
+// Bold text before first colon in list items
+#show list.item: it => {
+  let fields = it.body.fields()
+  if "text" in fields and ":" in fields.text {
+    let idx = fields.text.position(":")
+    list.item[*#(fields.text.slice(0, idx)):*#(fields.text.slice(idx + 1))]
+  } else if "children" in fields {
+    let (before, after, found) = ((), (), false)
+    for child in fields.children {
+      if found { after.push(child) }
+      else if type(child) != str and child.func() == text and ":" in child.text {
+        let idx = child.text.position(":")
+        before.push(child.text.slice(0, idx))
+        found = true
+        let post = child.text.slice(idx + 1)
+        if post.len() > 0 { after.push(post) }
+      } else { before.push(child) }
+    }
+    if found { list.item[*#(before.join()):*#(after.join())] } else { it }
+  } else { it }
+}
+
+- Name: John Doe
+- Age: 25
+- No colon here
+```
+
+### Recursive Plain-Text Extraction
+
+Extract plain text from any content element (useful for metadata export, see [query.md](query.md)):
+
+```typst
+#let plain-text(content) = {
+  let fields = content.fields()
+  if "text" in fields {
+    fields.text
+  } else if "children" in fields {
+    fields.children.map(c => {
+      if type(c) == str { c }
+      else if c.func() == [ ].func() { " " }  // space element
+      else { plain-text(c) }
+    }).join()
+  } else if "body" in fields {
+    plain-text(fields.body)
+  } else if "child" in fields {
+    plain-text(fields.child)
+  } else { "" }
+}
+```
+
+### Common Element Fields
+
+| Element     | Key fields                                        |
+| ----------- | ------------------------------------------------- |
+| `heading`   | `level`, `body`, `numbering`, `outlined`          |
+| `text`      | `text` (leaf — the actual string)                 |
+| `strong`    | `body`                                            |
+| `emph`      | `body`                                            |
+| `list.item` | `body`                                            |
+| `enum.item` | `body`, `number`                                  |
+| `figure`    | `body`, `caption`, `kind`, `supplement`           |
+| `sequence`  | `children` (array of child elements)              |
+| `space`     | (no fields — check with `c.func() == [ ].func()`) |
+
 For performance profiling and optimization, see [perf.md](perf.md).
