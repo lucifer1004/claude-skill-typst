@@ -9,17 +9,13 @@ Everything agent-facing lives under `skills/typst/`. The root `README.md` is for
 
 ```
 repo root (NOT bundled)               skills/typst/ (bundled skill)
-├── tools/                            ├── SKILL.md           # Entry point
-│   └── fetch-packages.py             ├── *.md               # Reference docs
-├── .github/workflows/                ├── scripts/
-│   ├── ci.yml                        │   ├── search-packages.py
-│   └── update-packages.yml           │   ├── validate-examples.py
-├── tests/                            │   └── perf-timings.py
-│   ├── test_search.py                ├── data/
-│   └── test_examples.py              │   ├── packages.json
-├── CLAUDE.md                         │   └── packages-bm25.json
-├── pixi.toml                         └── examples/
-└── README.md                             └── package-example/
+├── tools/          # Data generation  ├── SKILL.md       # Entry point
+├── tests/          # Test suite       ├── *.md           # Reference docs
+├── .github/        # CI workflows     ├── agents/        # Agent definitions
+├── Justfile        # Task runner      ├── scripts/       # Search & validation
+├── pixi.toml       # Dependencies    ├── data/          # JSON indexes
+├── CLAUDE.md       # Dev guide        └── examples/      # Runnable .typ files
+└── README.md       # Human readme
 ```
 
 ### Architecture: The Routing Rule
@@ -88,36 +84,30 @@ This is enforced by `tests/test_structure.py`.
 Before committing, verify:
 
 ```bash
-# All .typ examples compile
-for f in skills/typst/examples/*.typ; do
-  typst compile "$f" /dev/null -f pdf && echo "OK: $f" || echo "FAIL: $f"
-done
+just check   # runs lint + test + validate
+```
 
-# Package example compiles
-typst compile skills/typst/examples/package-example/lib.typ /dev/null -f pdf
+Or individually:
 
-# Inline code blocks in .md docs compile (requires markdown-it-py)
-pixi run python3 skills/typst/scripts/validate-examples.py
-
-# Python scripts have valid syntax
-python3 -m py_compile skills/typst/scripts/perf-timings.py
-python3 -m py_compile skills/typst/scripts/search-packages.py
-python3 -m py_compile skills/typst/scripts/validate-examples.py
-
-# Package search works
-python3 skills/typst/scripts/search-packages.py "chart" --top 3
-
-# Bundled docs are all routed from SKILL.md
-pytest tests/test_structure.py -v
+```bash
+just lint              # pre-commit hooks (ruff, format, etc.)
+just test              # pytest (search, structure, API tests)
+just validate          # inline Typst code blocks compile
+just compile-examples  # all .typ examples compile
 ```
 
 ## Planned Capabilities
 
 Track new features here. Move to the relevant `.md` once implemented.
 
-- [x] **Package search**: BM25 index of 1,188 Typst Universe packages (`scripts/search-packages.py`), weekly CI refresh
-- [x] **Tables and grids guide**: `tables.md` covering table(), grid(), cell spans, strokes, data generation
-- [x] **Academic writing guide**: `academic.md` for papers, bibliography, theorems, equations
+- [x] **Package search**: BM25 index of Typst Universe packages, weekly CI refresh
+- [x] **API reference search**: BM25 index with LaTeX symbol aliases, weekly CI refresh
+- [x] **Tables and grids guide**: `tables.md`
+- [x] **Academic writing guide**: `academic.md`
+- [x] **CLI query guide**: `query.md` for `typst query`, metadata export, multi-pass
+- [x] **Content introspection**: `advanced.md` section on `func()`, `fields()`, show rule decomposition
+- [x] **Ecosystem tooling**: tinymist, typstyle, typst-package-check, tytanic in `package.md`
+- [x] **Specialized agents**: `typst-verify`, `typst-package-qa`
 - [ ] **Chart/visualization guide**: `charts.md` covering CetZ, plotst, and raw drawing
 - [ ] **Slide/presentation guide**: `slides.md` for Polylux and touying
 - [ ] **i18n guide**: CJK, RTL, multilingual document patterns

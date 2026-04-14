@@ -59,7 +59,7 @@ Content goes here.
 | CLI query, metadata export, multi-pass      | [query.md](query.md)       |
 | Create a reusable template function         | [template.md](template.md) |
 | Create or publish a package                 | [package.md](package.md)   |
-| Debug output (pdftotext, repr, measure)     | [debug.md](debug.md)       |
+| Verify output (HTML/PNG/pdftotext, repr)    | [debug.md](debug.md)       |
 | Profile performance (--timings, hotspots)   | [perf.md](perf.md)         |
 
 [basics.md](basics.md) and [types.md](types.md) are also the foundation for developers.

@@ -136,25 +136,10 @@ VERSION=$(typst query doc.typ "<doc-info>" --field value --one | jq -r '.version
 
 ### Export TOC with page numbers
 
-Heading bodies are content, not strings. Use a helper to extract plain text (covers common markup; extend for math or special characters if needed):
+Heading bodies are content, not strings. Use the `plain-text` helper from [advanced.md](advanced.md) (Content Introspection section) to extract text:
 
 ```typst
-#let plain-text(content) = {
-  let fields = content.fields()
-  if "text" in fields {
-    fields.text
-  } else if "children" in fields {
-    fields.children.map(c => {
-      if type(c) == str { c }
-      else if c.func() == [ ].func() { " " }  // space element
-      else { plain-text(c) }
-    }).join()
-  } else if "body" in fields {
-    plain-text(fields.body)
-  } else if "child" in fields {
-    plain-text(fields.child)
-  } else { "" }
-}
+// plain-text() defined in advanced.md — recursive content-to-string extractor
 
 #context {
   let toc = query(heading).map(h => {
