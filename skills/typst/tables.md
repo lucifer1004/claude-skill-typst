@@ -257,6 +257,20 @@ Apply defaults to all tables in scope:
 )
 ```
 
+### From External Files
+
+`csv()` returns arrays of strings (not dicts). `json()` preserves types. Use `str()` to convert non-string values for table cells.
+
+```typst
+// csv("data.csv") returns: (("Name","Score"), ("Alice","95"), ...)
+// All values are strings — use int() or float() for math
+
+// json("data.json") returns: ((name: "Alice", score: 95), ...)
+// Types preserved — wrap in str() for table cells
+
+// Pattern: ..data.map(row => (row.name, str(row.score))).flatten()
+```
+
 ## Common Patterns
 
 | Pattern             | Code                                                  |
