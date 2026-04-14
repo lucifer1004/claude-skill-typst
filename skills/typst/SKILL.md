@@ -119,6 +119,18 @@ python3 scripts/search-packages.py --list-categories
 - **Python 3.10+** (optional): For package search and validation scripts
 - **jq** (optional): For parsing JSON output from `typst query` in shell scripts
 
+## API Reference Search
+
+Search the embedded index of Typst API functions, methods, and constructors:
+
+```bash
+python3 scripts/search-api.py "image width fit"
+python3 scripts/search-api.py "color lighten" --kind method
+python3 scripts/search-api.py --name str.position -v
+python3 scripts/search-api.py "rightarrow" --kind symbol   # LaTeX names work
+python3 scripts/search-api.py --list-categories
+```
+
 ## Ecosystem Tools
 
 Ecosystem tools: **tinymist** (LSP/editor), **typstyle** (formatter), **typst-package-check** (package validator), **tytanic** (visual test runner). For package tooling details, see [package.md](package.md).
