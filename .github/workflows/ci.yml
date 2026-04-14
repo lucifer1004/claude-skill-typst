@@ -24,4 +24,15 @@ jobs:
 
       - uses: prefix-dev/setup-pixi@v0.9.4
 
-      - run: pixi run test
+      - name: Run tests
+        run: pixi run test
+
+      - name: Validate inline code blocks
+        run: pixi run validate
+
+      - name: Compile examples
+        run: |
+          for f in skills/typst/examples/*.typ; do
+            pixi run typst compile "$f" /dev/null -f pdf
+          done
+          pixi run typst compile skills/typst/examples/package-example/lib.typ /dev/null -f pdf
