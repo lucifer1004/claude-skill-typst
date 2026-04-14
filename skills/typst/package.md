@@ -134,13 +134,72 @@ cp -r . ~/.local/share/typst/packages/local/my-package/0.1.0/
 #my-func(test-input)
 ```
 
+### Visual Regression Testing with tytanic
+
+[tytanic](https://github.com/typst-community/tytanic) (`tt`) compiles test files, renders pages to PNG, and diffs against stored references.
+
+```bash
+cargo install tytanic
+```
+
+Directory layout:
+
+```
+my-package/
+├── typst.toml
+├── lib.typ
+└── tests/
+    └── basic/
+        ├── test.typ       # test document
+        └── ref/
+            └── 1.png      # reference image (one per page)
+```
+
+Test file (`tests/basic/test.typ`):
+
+```typst
+#import "/lib.typ": *
+#my-func("test input")
+```
+
+Commands:
+
+```bash
+tt run                  # compile and compare all tests against refs
+tt run basic            # run a specific test
+tt update               # accept current output as new references
+tt list                 # list discovered tests
+```
+
+Commit `ref/` images to version control so CI can detect regressions. See the [tytanic guide](https://typst-community.github.io/tytanic/) for ephemeral references and advanced test modes.
+
+### Formatting with typstyle
+
+```bash
+cargo install typstyle
+typstyle -i lib.typ src/*.typ       # format in place
+typstyle --check lib.typ src/*.typ  # CI check (exit 1 if unformatted)
+```
+
 ## Publishing
+
+### Validate with typst-package-check
+
+Run the [official validator](https://github.com/typst/package-check) before submitting to Typst Universe:
+
+```bash
+cargo install typst-package-check
+typst-package-check check .
+```
+
+Checks: `typst.toml` schema, entrypoint exists, package compiles, license valid, file size limits.
 
 ### To Typst Universe
 
-1. Fork https://github.com/typst/packages
-2. Add package to `packages/preview/my-package/0.1.0/`
-3. Create pull request
+1. Run `typst-package-check check .` and fix any errors
+2. Fork https://github.com/typst/packages
+3. Add package to `packages/preview/my-package/0.1.0/`
+4. Create pull request
 
 ### Versioning
 
@@ -156,7 +215,9 @@ cp -r . ~/.local/share/typst/packages/local/my-package/0.1.0/
 - [ ] `entrypoint` file exports public API
 - [ ] `LICENSE` included
 - [ ] `README.md` with usage examples
-- [ ] Package compiles without errors
+- [ ] `typst-package-check check .` passes
+- [ ] `typstyle --check` passes
+- [ ] `tt run` passes (if visual tests exist)
 
 ## Best Practices
 

@@ -118,3 +118,7 @@ python3 scripts/search-packages.py --list-categories
 - **pdftotext** (optional): For text-level output verification
 - **Python 3.10+** (optional): For package search and validation scripts
 - **jq** (optional): For parsing JSON output from `typst query` in shell scripts
+
+## Ecosystem Tools
+
+Ecosystem tools: **tinymist** (LSP/editor), **typstyle** (formatter), **typst-package-check** (package validator), **tytanic** (visual test runner). For package tooling details, see [package.md](package.md).
