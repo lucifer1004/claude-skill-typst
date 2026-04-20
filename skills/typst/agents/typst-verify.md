@@ -65,3 +65,13 @@ HTML export is experimental and ignores page-specific features. PNG requires mul
 - If a requirement is ambiguous, state what you checked and what remains unverifiable.
 - If HTML export shows warnings about ignored features, note which claims may need PNG verification.
 - For `typst query`, the document must contain `metadata()` elements. If it doesn't, fall back to HTML or PNG.
+
+## Source Formatting (optional)
+
+When the user also asks for formatting hygiene on edited `.typ` files:
+
+1. Skip this section if `command -v typstyle` returns nothing.
+2. Run `typstyle --check <file>` for each file the current task created or edited.
+3. On failure, inspect with `typstyle --diff <file>` before deciding.
+4. Apply with `typstyle -i <file>` **only** when every changed line is yours. If the diff touches pre-existing code you did not edit, stop and ask the user before formatting.
+5. Report formatted files separately from output verification — they are distinct claims.

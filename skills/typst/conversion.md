@@ -16,6 +16,56 @@ For Typst language fundamentals (modes, functions), see [basics.md](basics.md). 
 
 For full Typst syntax details on headings, lists, links, and references, see [basics.md](basics.md).
 
+## From LaTeX: Package and Concept Map
+
+Typst is "batteries included" — most common LaTeX packages are built in:
+
+| LaTeX package            | Typst equivalent                                            |
+| ------------------------ | ----------------------------------------------------------- |
+| `graphicx`, `svg`        | `image()` function                                          |
+| `tabularx`, `tabularray` | `table()`, `grid()`                                         |
+| `amsmath`, `amssymb`     | Built into math mode; see [academic.md](academic.md)        |
+| `hyperref`               | `link()` function                                           |
+| `biblatex`, `natbib`     | `cite()`, `bibliography()` — see [academic.md](academic.md) |
+| `geometry`, `fancyhdr`   | `#set page(margin: ..., header: ..., footer: ...)`          |
+| `xcolor`                 | `#set text(fill: rgb("#..."))`, `luma()`, etc.              |
+| `babel`, `polyglossia`   | `#set text(lang: "zh")`                                     |
+| `lstlisting`, `minted`   | `raw()` function, ` ` ` ` markup                            |
+| `caption`                | `figure(caption: ...)`                                      |
+| `enumitem`               | `list()`, `enum()`, `terms()` parameters                    |
+| `parskip`                | `#set par(spacing: ..., first-line-indent: ...)`            |
+| `nicefrac`               | `frac(a, b, style: "horizontal")` or `"skewed"`             |
+| `csquotes`               | Smart quotes auto-active; set `text(lang: ...)`             |
+
+### Concept mappings
+
+| LaTeX                             | Typst                                         |
+| --------------------------------- | --------------------------------------------- |
+| `\documentclass{article}`         | `#show: template.with(...)` (from a template) |
+| `\newcommand{\foo}{...}`          | `#let foo = ...` or `#let foo(x) = ...`       |
+| `\textbf{x}` (style-only, no tag) | `#text(weight: "bold")[x]` — style only       |
+| Semantic strong emphasis          | `*x*` or `#strong[x]` — tagged for a11y       |
+| `\emph{x}` (semantic)             | `_x_` or `#emph[x]`                           |
+| `\textit{x}` (style-only)         | `#text(style: "italic")[x]`                   |
+| `\bfseries` (declaration-style)   | `#set text(weight: "bold")` in current scope  |
+| `\textsc{x}`                      | `#smallcaps[x]`                               |
+| `\left( ... \right)`              | Auto-scaling in math; use `lr(( ))` to force  |
+| `\label{foo}` / `\ref{foo}`       | `<foo>` / `@foo`                              |
+
+Set rules act like LaTeX declarations scoped to the current block; direct function calls act like argument-style commands.
+
+### "LaTeX look" starter
+
+Reproduces the Computer Modern / justified / tight-leading look of a classic LaTeX article:
+
+```typst
+#set page(margin: 1.75in)
+#set par(leading: 0.55em, spacing: 0.55em, first-line-indent: 1.8em, justify: true)
+#set text(font: "New Computer Modern")
+#show raw: set text(font: "New Computer Modern Mono")
+#show heading: set block(above: 1.4em, below: 1em)
+```
+
 ## Math Conversion
 
 ### Inline vs Display Math
@@ -30,18 +80,20 @@ $ integral_0^infinity e^(-x) dif x = 1 $
 
 ### Common Conversions
 
-| LaTeX            | Typst          |
-| ---------------- | -------------- |
-| `\frac{a}{b}`    | `frac(a, b)`   |
-| `\sqrt{x}`       | `sqrt(x)`      |
-| `\sum_{i=1}^{n}` | `sum_(i=1)^n`  |
-| `\int_a^b`       | `integral_a^b` |
-| `\alpha, \beta`  | `alpha, beta`  |
-| `\mathbf{x}`     | `bold(x)`      |
-| `\text{word}`    | `"word"`       |
-| `\left( \right)` | `lr(( ))`      |
-| `\begin{matrix}` | `mat(...)`     |
-| `\begin{cases}`  | `cases(...)`   |
+| LaTeX                           | Typst                                                       |
+| ------------------------------- | ----------------------------------------------------------- |
+| `\frac{a}{b}`                   | `frac(a, b)`                                                |
+| `\sqrt{x}`                      | `sqrt(x)`                                                   |
+| `\sum_{i=1}^{n}`                | `sum_(i=1)^n`                                               |
+| `\int_a^b`                      | `integral_a^b`                                              |
+| `\alpha, \beta`                 | `alpha, beta`                                               |
+| `\mathbf{x}`                    | `bold(x)`                                                   |
+| `\text{word}`                   | `"word"`                                                    |
+| `\left( \right)`                | auto (use `lr(( ))` to force)                               |
+| `\begin{matrix}`                | `mat(...)`                                                  |
+| `\begin{cases}`                 | `cases(...)`                                                |
+| `\citet{key}`, `\textcite{key}` | `#cite(<key>, form: "prose")`                               |
+| `\arrow`, alt forms             | `arrow.r.squiggly`, `arrow.l.long`, etc. (symbol modifiers) |
 
 ### Math Examples
 
@@ -263,6 +315,14 @@ Some *bold* and _italic_ text.
 - List item 1
 - List item 2
 ```
+
+## Current Limitations vs LaTeX
+
+- **Plotting ecosystem**: LaTeX has mature PGF/TikZ. Typst's `cetz` is catching up but narrower. See [package search](scripts/search-packages.py) for alternatives.
+- **Mid-page margin changes**: `#set page(margin: ...)` forces a page break. For local stretching, use `pad()` with negative padding.
+- **Change bars / track-changes workflows**: No first-class equivalent yet.
+- **`\input` with partial scope**: Typst `include` evaluates a whole file; scoping differs from TeX's `\input`.
+- **Some niche journal templates** may not yet be on Typst Universe — check before committing a submission to Typst-only.
 
 ## Using Pandoc for Conversion
 

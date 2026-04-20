@@ -271,3 +271,17 @@ typst query doc.typ "<doc-info>" --field value --one | jq -e '.status == "final"
 ```
 
 See [query-export.typ](examples/query-export.typ) for a runnable example.
+
+### Fileless probe
+
+When you need to test an expression's value without creating a scratch `.typ` file, pipe markup to stdin with `-`:
+
+```bash
+printf '#metadata(1 + 2) <probe>\n' | typst query - "<probe>" --field value --one
+# → 3
+
+printf '#metadata(type("hi")) <probe>\n' | typst query - "<probe>" --field value --one
+# → "str"
+```
+
+Useful when docs or search are ambiguous about return types or runtime behavior. Exit code 1 on compile failure — stderr carries the error.
