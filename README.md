@@ -48,6 +48,7 @@ typst compile /tmp/hello.typ "page-{p}.png" -f png
 | `tables.md`     | Users      | Tables, grids, cell spans, borders, data tables         |
 | `academic.md`   | Users      | Papers, bibliography, theorems, equations               |
 | `conversion.md` | Users      | Markdown/LaTeX to Typst conversion                      |
+| `cli.md`        | Both       | Typst CLI commands, export options, fonts, packages     |
 | `query.md`      | Both       | CLI `typst query`, metadata export, multi-pass builds   |
 | `advanced.md`   | Developers | State, context, query, content introspection, XML       |
 | `template.md`   | Developers | Reusable template function patterns                     |

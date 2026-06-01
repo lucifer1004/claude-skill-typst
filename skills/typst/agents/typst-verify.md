@@ -64,7 +64,7 @@ HTML export is experimental and ignores page-specific features. PNG requires mul
 - Use the cheapest method that answers the question. Don't export PNG to check if a heading exists.
 - If a requirement is ambiguous, state what you checked and what remains unverifiable.
 - If HTML export shows warnings about ignored features, note which claims may need PNG verification.
-- For `typst query`, the document must contain `metadata()` elements. If it doesn't, fall back to HTML or PNG.
+- Element selectors do not require `metadata()`; use `typst query <file> "heading"` or `typst query <file> "figure"` for structure counts. Labeled metadata queries require the source to contain matching `metadata()` elements.
 
 ## Source Formatting (optional)
 

@@ -89,16 +89,19 @@ def _collect_inline_blocks():
     """Extract all ```typst blocks from .md files, returning (id, code) pairs."""
     md = MarkdownIt()
     blocks = []
-    for name in sorted(os.listdir(SKILL_DIR)):
-        if not name.endswith(".md"):
-            continue
-        path = os.path.join(SKILL_DIR, name)
+    paths = []
+    for root, _dirs, filenames in os.walk(SKILL_DIR):
+        for name in filenames:
+            if name.endswith(".md"):
+                paths.append(os.path.join(root, name))
+
+    for path in sorted(paths):
         with open(path) as f:
             text = f.read()
         for token in md.parse(text):
             if token.type == "fence" and token.info.strip() == "typst":
                 line = token.map[0] + 2
-                block_id = f"{name}:{line}"
+                block_id = f"{os.path.relpath(path, SKILL_DIR)}:{line}"
                 blocks.append((block_id, token.content))
     return blocks
 

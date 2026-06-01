@@ -36,8 +36,8 @@ This is enforced by `tests/test_structure.py`.
 
 1. Create `skills/typst/charts.md`
 2. Start with a one-line cross-reference: `For language basics, see [basics.md](basics.md).`
-3. Add an entry to the "Quick Reference" table in `SKILL.md`
-4. Add a "When to Use" subsection in `SKILL.md` (2-4 bullet points)
+3. Add an entry to the relevant routing table in `SKILL.md`
+4. Keep `SKILL.md` as a router: add only the shortest task-oriented pointer, not a duplicate guide
 5. If the doc references runnable examples, put them in `examples/`
 
 ### New Script (e.g., `scripts/search-packages.py`)

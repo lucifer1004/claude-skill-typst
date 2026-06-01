@@ -19,14 +19,14 @@ Output goes to stdout as JSON (or YAML). Errors go to stderr. If compilation fai
 
 ## Key Options
 
-| Option              | Effect                                                    |
-| ------------------- | --------------------------------------------------------- |
-| `--field <FIELD>`   | Extract one field from each match (e.g., `value`, `body`) |
-| `--one`             | Expect exactly one match; return bare value, not array    |
-| \`--format json     | yaml\`                                                    |
-| `--pretty`          | Pretty-print JSON                                         |
-| `--input key=value` | Pass string to `sys.inputs` (repeatable)                  |
-| `--root <DIR>`      | Set project root for `/path` imports                      |
+| Option                | Effect                                                    |
+| --------------------- | --------------------------------------------------------- |
+| `--field <FIELD>`     | Extract one field from each match (e.g., `value`, `body`) |
+| `--one`               | Expect exactly one match; return bare value, not array    |
+| `--format json\|yaml` | Serialize as JSON or YAML                                 |
+| `--pretty`            | Pretty-print JSON                                         |
+| `--input key=value`   | Pass string to `sys.inputs` (repeatable)                  |
+| `--root <DIR>`        | Set project root for `/path` imports                      |
 
 ## Selectors
 

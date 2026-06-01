@@ -58,6 +58,7 @@ SKIP_PATTERNS = [
     r"\.\.\.",  # any ... ellipsis
     r'#import\s+"[^@]',  # relative imports (file not present)
     r'#import\s+"@local/',  # local packages (not installed)
+    r'#import\s+"@preview/',  # preview packages may require network/cache
     r'#import\s+"@preview/package-name',  # placeholder package names
     r'#include\s+"',  # include (file not present)
     r"image\(",  # image() references (with or without #)
@@ -170,7 +171,7 @@ def main():
     if args.files:
         md_files = [skill_dir / f for f in args.files]
     else:
-        md_files = sorted(skill_dir.glob("*.md"))
+        md_files = sorted(skill_dir.rglob("*.md"))
 
     results = []
     counts = {"pass": 0, "fail": 0, "skip": 0}
@@ -183,7 +184,7 @@ def main():
         blocks = extract_blocks(md_file)
         for block in blocks:
             skip_reason = should_skip(block["code"])
-            rel_path = md_file.name
+            rel_path = md_file.relative_to(skill_dir).as_posix()
 
             if skip_reason and not args.include_skipped:
                 counts["skip"] += 1

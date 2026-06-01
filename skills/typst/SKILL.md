@@ -16,6 +16,8 @@ typst watch document.typ                # recompile on change
 typst query document.typ "<label>"      # extract metadata as JSON (see query.md)
 ```
 
+For command options beyond this quick reference, see [cli.md](cli.md).
+
 Agent verification — choose by what you need to check (see [debug.md](debug.md) for details):
 
 | Method      | Command                                                                 | Best for                                  |
@@ -47,6 +49,7 @@ Content goes here.
 | Tables, grids, cell spans, borders, data tables    | [tables.md](tables.md)         |
 | Academic papers, bibliography, theorems, equations | [academic.md](academic.md)     |
 | Convert from Markdown or LaTeX                     | [conversion.md](conversion.md) |
+| Use Typst CLI commands and build options           | [cli.md](cli.md)               |
 | Extract data from documents, multi-pass builds     | [query.md](query.md)           |
 
 ## Developing Packages and Templates
