@@ -20,32 +20,37 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
 
-      - name: Clone typst and build typst-docs
+      - name: Clone typst
         run: |
           git clone --depth 1 https://github.com/typst/typst /tmp/typst-repo
-          cd /tmp/typst-repo
-          cargo build -p typst-docs --release
 
-      - name: Generate raw JSON
+      - name: Export upstream main API entries
         run: |
-          mkdir -p /tmp/typst-docs-assets
-          /tmp/typst-repo/target/release/typst-docs \
-            --assets-dir /tmp/typst-docs-assets \
-            --out-file /tmp/typst-api-raw.json
+          mkdir -p /tmp/typst-repo/docs/src/bin
+          cp tools/typst-api-exporter.rs /tmp/typst-repo/docs/src/bin/export-api.rs
+          cd /tmp/typst-repo
+          cargo run -p typst-docs --bin export-api --release -- \
+            --out /tmp/typst-api-main-entries.json
 
-      - name: Build API index and BM25
-        run: python3 tools/fetch-api-docs.py /tmp/typst-api-raw.json --out-dir skills/typst/data
+      - name: Build main API index and BM25
+        run: |
+          python3 tools/fetch-api-docs.py /tmp/typst-api-main-entries.json \
+            --input-format entries \
+            --output-stem api-main \
+            --out-dir skills/typst/data
 
       - name: Normalize formatting
         run: |
           pip install prek
-          prek run --files skills/typst/data/api.json skills/typst/data/api-bm25.json || true
+          prek run --files skills/typst/data/api-main.json skills/typst/data/api-main-bm25.json || true
 
       - name: Commit if changed
         run: |
-          git diff --exit-code skills/typst/data/ && exit 0
+          if [ -z "$(git status --porcelain -- skills/typst/data/api-main.json skills/typst/data/api-main-bm25.json)" ]; then
+            exit 0
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add skills/typst/data/api.json skills/typst/data/api-bm25.json
-          git commit -m "data: update API index"
+          git add skills/typst/data/api-main.json skills/typst/data/api-main-bm25.json
+          git commit -m "data: update main API index"
           git push

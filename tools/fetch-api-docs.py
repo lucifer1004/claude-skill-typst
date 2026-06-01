@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build Typst API index from the typst-docs JSON output.
+"""Build Typst API index from Typst API JSON data.
 
 Requires building `typst-docs` from the Typst compiler repo first:
     git clone --depth 1 https://github.com/typst/typst /tmp/typst-repo
@@ -441,9 +441,23 @@ def build_bm25_index(entries, latex_aliases=None):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Build Typst API index from typst-docs JSON output."
+        description="Build Typst API index from Typst API JSON data."
     )
-    parser.add_argument("input", help="Path to typst-docs JSON output")
+    parser.add_argument("input", help="Path to input JSON")
+    parser.add_argument(
+        "--input-format",
+        choices=["typst-docs-json", "entries"],
+        default="typst-docs-json",
+        help=(
+            "Input JSON format: old typst-docs page tree or normalized "
+            "api.json-style entries"
+        ),
+    )
+    parser.add_argument(
+        "--output-stem",
+        default="api",
+        help="Output filename stem, e.g. 'api' or 'api-main'",
+    )
     parser.add_argument(
         "--out-dir",
         default=os.path.join(
@@ -457,10 +471,18 @@ def main():
     )
     args = parser.parse_args()
 
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+", args.output_stem):
+        parser.error("--output-stem must be a filename stem, not a path")
+
     with open(args.input, "r", encoding="utf-8") as f:
         raw = json.load(f)
 
-    entries = extract_functions(raw)
+    if args.input_format == "entries":
+        if not isinstance(raw, list):
+            parser.error("--input-format entries expects a JSON array")
+        entries = raw
+    else:
+        entries = extract_functions(raw)
     print(f"Extracted {len(entries)} API entries")
 
     # Count by kind
@@ -472,14 +494,14 @@ def main():
 
     os.makedirs(args.out_dir, exist_ok=True)
 
-    api_path = os.path.join(args.out_dir, "api.json")
+    api_path = os.path.join(args.out_dir, f"{args.output_stem}.json")
     with open(api_path, "w", encoding="utf-8") as f:
         json.dump(entries, f, ensure_ascii=False, separators=(",", ":"))
     print(f"Wrote {api_path} ({os.path.getsize(api_path)} bytes)")
 
     latex_aliases = fetch_latex_aliases()
     bm25 = build_bm25_index(entries, latex_aliases=latex_aliases)
-    bm25_path = os.path.join(args.out_dir, "api-bm25.json")
+    bm25_path = os.path.join(args.out_dir, f"{args.output_stem}-bm25.json")
     with open(bm25_path, "w", encoding="utf-8") as f:
         json.dump(bm25, f, ensure_ascii=False, separators=(",", ":"))
     print(f"Wrote {bm25_path} ({os.path.getsize(bm25_path)} bytes)")
