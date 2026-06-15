@@ -123,6 +123,12 @@ typst compile document.typ --font-path ./fonts
 
 If `typst fonts` does not list the font you need, install it system-wide or use `--font-path` to point to a directory containing `.ttf`/`.otf` files.
 
+### Variable Fonts (Typst 0.15+)
+
+Use `typst fonts --variants` to inspect weights, stretches, and variable axes. Set standard axes through `weight` / `stretch`; use `variations` for custom OpenType axes such as `wght`, `GRAD`, or `MONO` when the selected font supports them.
+
+Inline pattern: `#set text(font: "Your Variable Font", weight: 650, variations: (GRAD: 0.4))`.
+
 ## Figure Customization
 
 ```typst

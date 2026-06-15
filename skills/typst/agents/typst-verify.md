@@ -14,9 +14,10 @@ You have three methods. Choose by what you need to check — use multiple when n
 | ------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | HTML export   | `typst compile <file> /dev/stdout -f html --features html 2>/dev/null` | Text content, headings, tables, figures, cross-references              |
 | PNG export    | `typst compile <file> "page-{p}.png" -f png`                           | Visual layout, alignment, spacing, fonts, page breaks, headers/footers |
-| `typst query` | `typst query <file> "heading"` or `typst query <file> "<label>"`       | Element counts, metadata, structured data, page numbers                |
+| `typst eval`  | `typst eval --in <file> 'query(heading).len()'`                        | Typst 0.15+ element counts, metadata, structured data, page numbers    |
+| `typst query` | `typst query <file> "heading"` or `typst query <file> "<label>"`       | Typst 0.14 fallback for element counts and metadata                    |
 
-HTML export is experimental and ignores page-specific features. PNG requires multimodal capability (read the image file). `typst query` works with element selectors (`heading`, `figure`) on any document; labeled `metadata()` queries require the source to contain metadata elements.
+HTML export is experimental and ignores page-specific features. PNG requires multimodal capability (read the image file). `typst eval --in` is the default introspection path on Typst 0.15+; use `typst query` when verifying against Typst 0.14. Element selectors (`heading`, `figure`) work on any document; labeled metadata queries require the source to contain metadata elements.
 
 ## Process
 
@@ -34,9 +35,9 @@ HTML export is experimental and ignores page-specific features. PNG requires mul
    - "Has section X" → HTML export, grep for `<h2>`/`<h3>`
    - "Table has correct data" → HTML export, check `<table>` content
    - "Page numbers show" → PNG export (HTML ignores page features)
-   - "Correct metadata" → `typst query` with label
+   - "Correct metadata" → `typst eval --in` with label
    - "Layout looks right" → PNG export, read the image
-   - "N figures exist" → `typst query` with `figure` selector, or HTML grep for `<figure>`
+   - "N figures exist" → `typst eval --in` with `figure` selector, or HTML grep for `<figure>`
 
 4. **Execute** — Run verifications in parallel where possible.
 
@@ -64,7 +65,7 @@ HTML export is experimental and ignores page-specific features. PNG requires mul
 - Use the cheapest method that answers the question. Don't export PNG to check if a heading exists.
 - If a requirement is ambiguous, state what you checked and what remains unverifiable.
 - If HTML export shows warnings about ignored features, note which claims may need PNG verification.
-- Element selectors do not require `metadata()`; use `typst query <file> "heading"` or `typst query <file> "figure"` for structure counts. Labeled metadata queries require the source to contain matching `metadata()` elements.
+- Element selectors do not require `metadata()`; use `typst eval --in <file> 'query(heading).len()'` for structure counts on Typst 0.15+, or `typst query <file> "heading"` on 0.14. Labeled metadata queries require the source to contain matching `metadata()` elements.
 
 ## Source Formatting (optional)
 

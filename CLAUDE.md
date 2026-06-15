@@ -104,7 +104,7 @@ Track new features here. Move to the relevant `.md` once implemented.
 - [x] **API reference search**: BM25 index with LaTeX symbol aliases, weekly CI refresh
 - [x] **Tables and grids guide**: `tables.md`
 - [x] **Academic writing guide**: `academic.md`
-- [x] **CLI query guide**: `query.md` for `typst query`, metadata export, multi-pass
+- [x] **CLI introspection guide**: `query.md` for `typst eval` / `typst query`, metadata export, multi-pass
 - [x] **Content introspection**: `advanced.md` section on `func()`, `fields()`, show rule decomposition
 - [x] **Ecosystem tooling**: tinymist, typstyle, typst-package-check, tytanic in `package.md`
 - [x] **Specialized agents**: `typst-verify`, `typst-package-qa`

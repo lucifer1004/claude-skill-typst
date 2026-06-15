@@ -1,60 +1,92 @@
-# CLI Query (`typst query`)
+# CLI Introspection (`typst eval` / `typst query`)
 
 For the in-document `query()` function, see [advanced.md](advanced.md). For language basics, see [basics.md](basics.md).
 
-`typst query` compiles a document and extracts structured data as JSON. It bridges Typst's introspection system with external tooling — shell scripts, CI pipelines, multi-pass builds.
+Use `typst eval --in <file>` on Typst 0.15+. It evaluates a Typst expression in a document context and serializes the result as JSON or YAML. `typst query` is deprecated in Typst 0.15, but remains the 0.14 fallback.
 
-## Syntax
+## Version Check
+
+```bash
+typst --version
+```
+
+| Version | Preferred command                  |
+| ------- | ---------------------------------- |
+| 0.15+   | `typst eval --in doc.typ '...'`    |
+| 0.14.x  | `typst query doc.typ "<selector>"` |
+
+## Typst 0.15+: `typst eval`
+
+```bash
+typst eval --in doc.typ 'query(heading).len()'
+typst eval --in doc.typ 'query(<doc-info>).first().value' --pretty
+typst eval --in doc.typ 'query(<task>).map(it => it.value)' --pretty
+```
+
+| Option                | Effect                                   |
+| --------------------- | ---------------------------------------- |
+| `--in <FILE>`         | Evaluate in a document context           |
+| `--format json\|yaml` | Serialize as JSON or YAML                |
+| `--pretty`            | Pretty-print JSON                        |
+| `--input key=value`   | Pass string to `sys.inputs` (repeatable) |
+| `--root <DIR>`        | Set project root for `/path` imports     |
+
+Use `typst eval` for expression probes too:
+
+```bash
+typst eval '1 + 2'
+typst eval 'type("hi")'
+```
+
+## 0.14 Fallback: `typst query`
 
 ```bash
 typst query [OPTIONS] <INPUT> <SELECTOR>
 ```
 
-| Argument     | Description                               |
-| ------------ | ----------------------------------------- |
-| `<INPUT>`    | Path to `.typ` file (use `-` for stdin)   |
-| `<SELECTOR>` | Typst selector: element type or `<label>` |
+`typst query` accepts element selectors and labels:
 
-Output goes to stdout as JSON (or YAML). Errors go to stderr. If compilation fails, exit code is 1 and stdout is empty — guard CI scripts accordingly.
+```bash
+typst query doc.typ "heading"
+typst query doc.typ "figure"
+typst query doc.typ "<doc-info>" --field value --one --pretty
+```
 
-## Key Options
-
-| Option                | Effect                                                    |
-| --------------------- | --------------------------------------------------------- |
-| `--field <FIELD>`     | Extract one field from each match (e.g., `value`, `body`) |
-| `--one`               | Expect exactly one match; return bare value, not array    |
-| `--format json\|yaml` | Serialize as JSON or YAML                                 |
-| `--pretty`            | Pretty-print JSON                                         |
-| `--input key=value`   | Pass string to `sys.inputs` (repeatable)                  |
-| `--root <DIR>`        | Set project root for `/path` imports                      |
+The useful 0.14 options are `--field`, `--one`, `--format json|yaml`, `--pretty`, `--input`, and `--root`.
 
 ## Selectors
 
 ### Element type
 
 ```bash
-typst query doc.typ "heading"
-typst query doc.typ "figure"
-typst query doc.typ "math.equation"
+typst eval --in doc.typ 'query(heading).len()'
+typst eval --in doc.typ 'query(figure).len()'
+typst eval --in doc.typ 'query(math.equation).len()'
 ```
 
 ### Label
 
 ```bash
-typst query doc.typ "<my-label>"
+typst eval --in doc.typ 'query(<my-label>).first().value'
 ```
 
 ### Filtered with `.where()`
 
 ```bash
-typst query doc.typ "heading.where(level: 1)"
-typst query doc.typ "figure.where(kind: image)"
-typst query doc.typ "figure.where(kind: table)"
+typst eval --in doc.typ 'query(heading.where(level: 1)).len()'
+typst eval --in doc.typ 'query(figure.where(kind: image)).len()'
+typst eval --in doc.typ 'query(figure.where(kind: table)).len()'
 ```
 
-## `metadata()` — The Primary Export Mechanism
+### Restricted with `.within()` (Typst 0.15+)
 
-`metadata(value)` creates invisible content that holds any Typst value. Attach a label, then query it from the CLI.
+```bash
+typst eval --in doc.typ 'query(heading.where(level: 2).within(<methods>)).len()'
+```
+
+## `metadata()` Export
+
+`metadata(value)` creates invisible content that holds any Typst value. Attach a label, then inspect it from the CLI.
 
 ```typst
 #metadata("1.0.0") <version>
@@ -62,14 +94,21 @@ typst query doc.typ "figure.where(kind: table)"
 ```
 
 ```bash
-typst query doc.typ "<version>" --field value --one
-# → "1.0.0"
+typst eval --in doc.typ 'query(<version>).first().value'
+# -> "1.0.0"
 
-typst query doc.typ "<doc-info>" --field value --one --pretty
-# → {"title": "Report", "status": "draft"}
+typst eval --in doc.typ 'query(<doc-info>).first().value' --pretty
+# -> {"title": "Report", "status": "draft"}
 ```
 
-### Type mapping (Typst → JSON)
+### 0.14 equivalent
+
+```bash
+typst query doc.typ "<version>" --field value --one
+typst query doc.typ "<doc-info>" --field value --one --pretty
+```
+
+## Type Mapping
 
 | Typst        | JSON                            |
 | ------------ | ------------------------------- |
@@ -82,34 +121,18 @@ typst query doc.typ "<doc-info>" --field value --one --pretty
 | `dictionary` | object                          |
 | content      | nested object with `"func"` key |
 
-## `--field` and `--one`
-
-```bash
-typst query doc.typ "heading"                        # full element objects (array)
-typst query doc.typ "heading" --field body            # one field per element (array)
-typst query doc.typ "<version>" --field value --one   # exactly one match (bare value)
-# --one exits with code 1 if 0 or 2+ matches
-```
-
-| Element         | Useful fields             |
-| --------------- | ------------------------- |
-| `metadata`      | `value`                   |
-| `heading`       | `body`, `level`           |
-| `figure`        | `caption`, `body`, `kind` |
-| `math.equation` | `body`, `block`           |
-
 ## Label Placement in `context`
 
-The label must go on `metadata()` itself, **inside** the context block:
+The label must go on `metadata()` itself, inside the context block:
 
 ```typst
-// CORRECT — label on metadata
+// CORRECT: label on metadata
 #context {
   let data = query(heading).len()
   [#metadata(data) <heading-count>]
 }
 
-// WRONG — label on context block, returns {"func":"context"} with no value field
+// WRONG: label on context block, returns context content with no value field
 #context {
   metadata(query(heading).len())
 } <heading-count>
@@ -130,29 +153,8 @@ The label must go on `metadata()` itself, **inside** the context block:
 ```
 
 ```bash
-typst query doc.typ "<doc-info>" --field value --one --pretty
-VERSION=$(typst query doc.typ "<doc-info>" --field value --one | jq -r '.version')
-```
-
-### Export TOC with page numbers
-
-Heading bodies are content, not strings. Use the `plain-text` helper from [advanced.md](advanced.md) (Content Introspection section) to extract text:
-
-```typst
-// plain-text() defined in advanced.md — recursive content-to-string extractor
-
-#context {
-  let toc = query(heading).map(h => {
-    let pg = counter(page).at(h.location()).first()
-    (level: h.level, title: plain-text(h.body), page: pg)
-  })
-  [#metadata(toc) <toc-export>]
-}
-```
-
-```bash
-typst query doc.typ "<toc-export>" --field value --one --pretty
-# → [{"level":1,"title":"Introduction","page":1}, ...]
+typst eval --in doc.typ 'query(<doc-info>).first().value' --pretty
+VERSION=$(typst eval --in doc.typ 'query(<doc-info>).first().value.at("version")' | jq -r .)
 ```
 
 ### Export document statistics
@@ -170,8 +172,29 @@ typst query doc.typ "<toc-export>" --field value --one --pretty
 ```
 
 ```bash
-typst query doc.typ "<doc-stats>" --field value --one
-# → {"headings":5,"figures":3,"equations":12,"pages":8}
+typst eval --in doc.typ 'query(<doc-stats>).first().value' --pretty
+# -> {"headings":5,"figures":3,"equations":12,"pages":8}
+```
+
+### Export TOC with page numbers
+
+Heading bodies are content, not strings. Use the `plain-text` helper from [advanced.md](advanced.md) (Content Introspection section) to extract text.
+
+```typst
+#let plain-text(value) = repr(value)
+
+#context {
+  let toc = query(heading).map(h => {
+    let pg = counter(page).at(h.location()).first()
+    (level: h.level, title: plain-text(h.body), page: pg)
+  })
+  [#metadata(toc) <toc-export>]
+}
+```
+
+```bash
+typst eval --in doc.typ 'query(<toc-export>).first().value' --pretty
+# -> [{"level":1,"title":"Introduction","page":1}, ...]
 ```
 
 ### Multi-pass compilation
@@ -197,13 +220,13 @@ Query in pass 1, feed back via `--input` in pass 2. Example: "Page X of N" foote
 ```
 
 ```bash
-PAGES=$(typst query main.typ "<page-count>" --field value --one)
+PAGES=$(typst eval --in main.typ 'query(<page-count>).first().value')
 typst compile main.typ --input "total-pages=$PAGES"
 ```
 
 ### Conditional metadata with `sys.inputs`
 
-Label must be on `metadata()` inside the `if`, not on the `if` block (see label placement above).
+Label must be on `metadata()` inside the `if`, not on the `if` block.
 
 ```typst
 #let mode = sys.inputs.at("mode", default: "normal")
@@ -216,12 +239,12 @@ Label must be on `metadata()` inside the `if`, not on the `if` block (see label 
 ```
 
 ```bash
-typst query doc.typ "<ci-meta>" --field value --one --input mode=ci
+typst eval --in doc.typ 'query(<ci-meta>).first().value' --input mode=ci --pretty
 ```
 
 ### Structured task/status tracking
 
-Multiple elements can share a label — `typst query` returns all matches as an array.
+Multiple elements can share a label. `query(<task>)` returns all matching metadata elements.
 
 ```typst
 #let task(name, status, priority: "medium") = {
@@ -234,8 +257,8 @@ Multiple elements can share a label — `typst query` returns all matches as an 
 ```
 
 ```bash
-typst query doc.typ "<task>" --field value --pretty
-# → [{"name":"Design API","status":"done","priority":"high"}, ...]
+typst eval --in doc.typ 'query(<task>).map(it => it.value)' --pretty
+# -> [{"name":"Design API","status":"done","priority":"high"}, ...]
 ```
 
 ### CI version gate
@@ -243,7 +266,7 @@ typst query doc.typ "<task>" --field value --pretty
 ```bash
 #!/bin/bash
 EXPECTED="2.1.0"
-ACTUAL=$(typst query doc.typ "<version>" --field value --one | tr -d '"')
+ACTUAL=$(typst eval --in doc.typ 'query(<version>).first().value' | tr -d '"')
 if [ "$ACTUAL" != "$EXPECTED" ]; then
   echo "Version mismatch: expected $EXPECTED, got $ACTUAL" >&2
   exit 1
@@ -253,35 +276,38 @@ fi
 ### Batch validation
 
 ```bash
-# Verify all docs have required metadata
 for f in docs/*.typ; do
-  typst query "$f" "<doc-info>" --field value --one > /dev/null 2>&1 \
+  typst eval --in "$f" 'query(<doc-info>).first().value' > /dev/null 2>&1 \
     || echo "MISSING metadata: $f" >&2
 done
 ```
 
 ## Agent Workflow
 
-Agents cannot preview PDFs — use `typst query` to verify document structure:
+Use `typst eval --in` to verify document structure without opening a PDF:
 
 ```bash
-typst query doc.typ "<expected-section>" --one > /dev/null 2>&1 && echo "OK"
-typst query doc.typ "figure" | jq 'length'                    # figure count
-typst query doc.typ "<doc-info>" --field value --one | jq -e '.status == "final"'
+typst eval --in doc.typ 'query(<expected-section>).len() > 0' | grep true
+typst eval --in doc.typ 'query(figure).len()'                    # figure count
+typst eval --in doc.typ 'query(<doc-info>).first().value.at("status")' | jq -e '. == "final"'
 ```
 
 See [query-export.typ](examples/query-export.typ) for a runnable example.
 
-### Fileless probe
+## Fileless Probe
 
-When you need to test an expression's value without creating a scratch `.typ` file, pipe markup to stdin with `-`:
+For a raw expression:
 
 ```bash
-printf '#metadata(1 + 2) <probe>\n' | typst query - "<probe>" --field value --one
-# → 3
-
-printf '#metadata(type("hi")) <probe>\n' | typst query - "<probe>" --field value --one
-# → "str"
+typst eval '1 + 2'
+# -> 3
 ```
 
-Useful when docs or search are ambiguous about return types or runtime behavior. Exit code 1 on compile failure — stderr carries the error.
+For document-context probes from stdin:
+
+```bash
+printf '#metadata(1 + 2) <probe>\n' | typst eval --in - 'query(<probe>).first().value'
+# -> 3
+```
+
+Useful when docs or search are ambiguous about return types or runtime behavior. Exit code 1 on compile failure; stderr carries the error.

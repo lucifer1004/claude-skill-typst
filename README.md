@@ -49,7 +49,7 @@ typst compile /tmp/hello.typ "page-{p}.png" -f png
 | `academic.md`   | Users      | Papers, bibliography, theorems, equations               |
 | `conversion.md` | Users      | Markdown/LaTeX to Typst conversion                      |
 | `cli.md`        | Both       | Typst CLI commands, export options, fonts, packages     |
-| `query.md`      | Both       | CLI `typst query`, metadata export, multi-pass builds   |
+| `query.md`      | Both       | CLI introspection, metadata export, multi-pass builds   |
 | `advanced.md`   | Developers | State, context, query, content introspection, XML       |
 | `template.md`   | Developers | Reusable template function patterns                     |
 | `package.md`    | Developers | Package development, testing, and publishing            |
@@ -68,6 +68,7 @@ just search-pkg "chart visualization"
 just search-api "image width fit"
 just search-api "rightarrow" --kind symbol   # LaTeX names work
 just search-api --name str.position -v       # Exact lookup
+just search-api "path" --channel 0.14.2      # Typst 0.14 compatibility
 ```
 
 ## Development

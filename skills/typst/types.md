@@ -135,6 +135,17 @@ For syntax, imports, functions, and control flow, see [basics.md](basics.md).
 // Most functions return content
 ```
 
+## Paths (Typst 0.15+)
+
+`path("...")` creates a file-system path value. Prefer forward slashes in Typst source, even on Windows; backslashes in source paths are not portable.
+
+```typst
+#let p = path("figures/logo.svg")
+#let bib = path("refs/main.bib")
+```
+
+In Typst 0.14, `path(...)` was a drawing function in the Visualize category. In Typst 0.15, use `curve(...)` for drawing paths and `path(...)` for file-system paths.
+
 ## Colors
 
 ```typst

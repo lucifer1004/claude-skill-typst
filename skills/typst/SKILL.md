@@ -13,7 +13,7 @@ typst compile document.typ output.pdf   # explicit output path
 typst compile document.typ -f png       # export as PNG image
 typst compile src/main.typ --root .     # set project root for /path imports
 typst watch document.typ                # recompile on change
-typst query document.typ "<label>"      # extract metadata as JSON (see query.md)
+typst eval --in document.typ 'query(heading).len()'  # Typst 0.15+ introspection
 ```
 
 For command options beyond this quick reference, see [cli.md](cli.md).
@@ -54,14 +54,14 @@ Content goes here.
 
 ## Developing Packages and Templates
 
-| When you need to...                         | Read                       |
-| ------------------------------------------- | -------------------------- |
-| State, counters, in-document `query()`, XML | [advanced.md](advanced.md) |
-| CLI query, metadata export, multi-pass      | [query.md](query.md)       |
-| Create a reusable template function         | [template.md](template.md) |
-| Create or publish a package                 | [package.md](package.md)   |
-| Verify output (HTML/PNG/pdftotext, repr)    | [debug.md](debug.md)       |
-| Profile performance (--timings, hotspots)   | [perf.md](perf.md)         |
+| When you need to...                            | Read                       |
+| ---------------------------------------------- | -------------------------- |
+| State, counters, in-document `query()`, XML    | [advanced.md](advanced.md) |
+| CLI introspection, metadata export, multi-pass | [query.md](query.md)       |
+| Create a reusable template function            | [template.md](template.md) |
+| Create or publish a package                    | [package.md](package.md)   |
+| Verify output (HTML/PNG/pdftotext, repr)       | [debug.md](debug.md)       |
+| Profile performance (--timings, hotspots)      | [perf.md](perf.md)         |
 
 [basics.md](basics.md) and [types.md](types.md) are also the foundation for developers.
 
@@ -113,7 +113,7 @@ Copy the closest starter, adjust, compile. For CVs, letters, or slides, search p
   - Windows: `winget install typst`
 - **pdftotext** (optional): For text-level output verification
 - **Python 3.10+** (optional): For package search and validation scripts
-- **jq** (optional): For parsing JSON output from `typst query` in shell scripts
+- **jq** (optional): For parsing JSON output from `typst eval` or `typst query` in shell scripts
 
 ## API Reference Search
 
@@ -124,6 +124,7 @@ python3 scripts/search-api.py "image width fit"
 python3 scripts/search-api.py "color lighten" --kind method
 python3 scripts/search-api.py --name str.position -v
 python3 scripts/search-api.py "rightarrow" --kind symbol   # LaTeX names work
+python3 scripts/search-api.py "path" --channel 0.14.2      # legacy Typst 0.14 API
 python3 scripts/search-api.py --list-categories
 ```
 

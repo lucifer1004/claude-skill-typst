@@ -5,6 +5,8 @@ Usage:
     python3 scripts/search-api.py "position slice string"
     python3 scripts/search-api.py "image width" --top 5
     python3 scripts/search-api.py "query heading" --kind method
+    python3 scripts/search-api.py "query heading" --channel 0.15.0
+    python3 scripts/search-api.py "query heading" --channel 0.14.2
     python3 scripts/search-api.py "query heading" --channel main
     python3 scripts/search-api.py "color" --kind type --json
     python3 scripts/search-api.py --name str.position
@@ -40,6 +42,8 @@ def resolve_index_paths(data_dir, channel):
     """Return (api_path, bm25_path) for an API data channel."""
     stems = {
         "stable": "api",
+        "0.15.0": "api-0.15.0",
+        "0.14.2": "api-0.14.2",
         "main": "api-main",
     }
     stem = stems[channel]
@@ -155,9 +159,9 @@ def main():
     parser.add_argument("--data-dir", help="Override data directory")
     parser.add_argument(
         "--channel",
-        choices=["stable", "main"],
+        choices=["stable", "0.15.0", "0.14.2", "main"],
         default="stable",
-        help="API data channel: stable release alias or upstream main preview",
+        help="API data channel: stable release alias, legacy 0.14.2, or upstream main preview",
     )
     args = parser.parse_args()
 

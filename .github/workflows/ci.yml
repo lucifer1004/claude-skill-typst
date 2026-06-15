@@ -9,20 +9,20 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v6.2.0
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.x'
 
-      - uses: j178/prek-action@v1
+      - uses: j178/prek-action@v2
 
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6.0.2
+      - uses: actions/checkout@v6
 
-      - uses: prefix-dev/setup-pixi@v0.9.4
+      - uses: prefix-dev/setup-pixi@v0
 
       - name: Run tests
         run: pixi run test
@@ -36,3 +36,26 @@ jobs:
             pixi run typst compile "$f" /dev/null -f pdf
           done
           pixi run typst compile skills/typst/examples/package-example/lib.typ /dev/null -f pdf
+
+  legacy-014-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: prefix-dev/setup-pixi@v0
+
+      - name: Smoke Typst 0.14.2 query fallback
+        run: |
+          set -euo pipefail
+          pixi exec --spec 'typst==0.14.2' typst --version
+          pixi exec --spec 'typst==0.14.2' typst query skills/typst/examples/query-export.typ '<doc-info>' --field value --one --pretty
+          pixi run python skills/typst/scripts/search-api.py --channel 0.14.2 --name path --top 1 | grep -F 'path('
+
+      - name: Compile version-neutral examples with Typst 0.14.2
+        run: |
+          set -euo pipefail
+          legacy_typst=(pixi exec --spec 'typst==0.14.2' typst)
+          for f in skills/typst/examples/*.typ; do
+            "${legacy_typst[@]}" compile "$f" /dev/null -f pdf
+          done
+          "${legacy_typst[@]}" compile skills/typst/examples/package-example/lib.typ /dev/null -f pdf

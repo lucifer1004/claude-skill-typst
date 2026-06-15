@@ -6,19 +6,19 @@ For full option lists, run `typst <command> --help`. This page is a routing inde
 
 - Pointers to the right existing reference doc.
 - CI/export flag combinations that do not fit a language or debugging guide.
-- Pitfalls around PDF standards, dependency files, package caches, templates, and page-numbered outputs.
+- Pitfalls around PDF standards, bundle export, dependency files, package caches, templates, and page-numbered outputs.
 
 ## Command Choice
 
-| Task                                                                                              | Use                      |
-| ------------------------------------------------------------------------------------------------- | ------------------------ |
-| Validate or inspect rendered output                                                               | [debug.md](debug.md)     |
-| Use `typst query`, `--field`, `--one`, `--target html`, or multi-pass builds                      | [query.md](query.md)     |
-| Fix project-root or `/absolute/path` import issues                                                | [basics.md](basics.md)   |
-| Configure fonts or use `typst fonts` / `--font-path`                                              | [styling.md](styling.md) |
-| Profile with `--timings`                                                                          | [perf.md](perf.md)       |
-| Develop or publish packages                                                                       | [package.md](package.md) |
-| Initialize from a template, produce PDF/A or PDF/UA, emit dependency files, or pin package caches | This page                |
+| Task                                                                                                   | Use                      |
+| ------------------------------------------------------------------------------------------------------ | ------------------------ |
+| Validate or inspect rendered output                                                                    | [debug.md](debug.md)     |
+| Use `typst eval` / `typst query`, metadata export, or multi-pass builds                                | [query.md](query.md)     |
+| Fix project-root or `/absolute/path` import issues                                                     | [basics.md](basics.md)   |
+| Configure fonts, variable axes, `typst fonts --variants`, or `--font-path`                             | [styling.md](styling.md) |
+| Profile with `--timings`                                                                               | [perf.md](perf.md)       |
+| Develop or publish packages                                                                            | [package.md](package.md) |
+| Initialize from a template, produce PDF/A or PDF/UA, emit dependency files, bundle HTML, or pin caches | This page                |
 
 ## CI Export Recipe
 
@@ -29,7 +29,7 @@ typst compile doc.typ out.pdf --root . \
   --deps deps.json --deps-format json
 ```
 
-Use this shape when comparing artifacts across machines. Pin the root, timestamp, and package cache; record dependencies for rebuild logic. `--deps-format make` is for Makefiles; `zero` handles paths that cannot be represented as Unicode.
+Use this shape when comparing artifacts across machines. Pin the root, timestamp, and package cache; record dependencies for rebuild logic. In Typst 0.15, JSON deps include outputs. `--deps-format make` is for Makefiles; `zero` handles paths that cannot be represented as Unicode.
 
 ## PDF Standards
 
@@ -39,7 +39,15 @@ typst compile doc.typ out.pdf --pdf-standard ua-1
 typst compile doc.typ out.pdf --pdf-standard a-4,ua-1
 ```
 
-Use CLI values like `1.7`, `2.0`, `a-4`, or `ua-1`; do not write `pdf/a-4` or `pdf/ua-1`. Typst 0.14 writes tagged PDFs by default. `--no-pdf-tags` is an explicit size/compatibility tradeoff.
+Use CLI values like `1.7`, `2.0`, `a-4`, or `ua-1`; do not write `pdf/a-4` or `pdf/ua-1`. Comma-separated standards such as `a-4,ua-1` are valid. `--no-pdf-tags` is an explicit size/compatibility tradeoff.
+
+## Bundle Export
+
+```bash
+typst compile site.typ dist -f bundle --features bundle,html
+```
+
+Bundle export is experimental in Typst 0.15. Use `document("page.html")[...]` for pages and `asset("robots.txt", "...")` for extra files.
 
 ## Template Init
 
@@ -56,9 +64,15 @@ Use `@local/...` with `--package-path` when testing templates before publication
 - `-` means stdin for input and stdout for output, but writing PDF/PNG bytes to a terminal is rarely useful.
 - Multi-page PNG/SVG outputs need a template such as `page-{p}.png`; `{0p}` pads page numbers and `{t}` inserts total page count.
 - `--pages` uses one-indexed physical page numbers, not the document's printed page counter.
-- `watch` is for human feedback loops; use `compile` or `query` in CI.
+- `watch` is for human feedback loops; use `compile`, `eval`, or 0.14 `query` in CI.
 - `typst completions <shell>` exists for shell setup, but agents normally do not need it.
+
+## 0.14 Compatibility
+
+- Use `typst query` instead of `typst eval`; see [query.md](query.md).
+- Search legacy APIs with `python3 scripts/search-api.py "path" --channel 0.14.2`.
+- The `typst-0.14.2` repository tag freezes the old skill snapshot.
 
 ## When to Read Help
 
-Use `typst compile --help`, `typst watch --help`, `typst query --help`, or `typst init --help` when you need the complete current option list. This page is intentionally not a mirror of those outputs.
+Use `typst compile --help`, `typst watch --help`, `typst eval --help`, `typst query --help`, or `typst init --help` when you need the complete current option list. This page is intentionally not a mirror of those outputs.

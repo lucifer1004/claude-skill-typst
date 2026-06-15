@@ -45,6 +45,11 @@ def api():
     return sa.load_json(os.path.join(DATA_DIR, "api.json"))
 
 
+@pytest.fixture(scope="module")
+def legacy_api():
+    return sa.load_json(os.path.join(DATA_DIR, "api-0.14.2.json"))
+
+
 def _search(query, bm25, api, kind=None, top=10):
     """Run BM25 search with optional kind filter, return list of entry names."""
     tokens = sa.tokenize(query)
@@ -122,6 +127,13 @@ class TestDataIntegrity:
             assert "kind" in e
             assert "category" in e
             assert "oneliner" in e
+
+    def test_stable_and_legacy_api_snapshots_are_distinct(self, api, legacy_api):
+        stable_entries = {(e["name"], e["kind"], e["category"]) for e in api}
+        entries = {(e["name"], e["kind"], e["category"]) for e in legacy_api}
+
+        assert ("asset", "function", "Model") in stable_entries
+        assert ("path", "function", "Visualize") in entries
 
 
 # ---------------------------------------------------------------------------

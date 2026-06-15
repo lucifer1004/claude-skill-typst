@@ -1,14 +1,14 @@
-// Query export example — demonstrates metadata export for `typst query` CLI.
+// Query export example — demonstrates metadata export for CLI introspection.
 //
 // Usage:
-//   typst query examples/query-export.typ "<doc-info>" --field value --one --pretty
-//   typst query examples/query-export.typ "<doc-stats>" --field value --one --pretty
-//   typst query examples/query-export.typ "<task>" --field value --pretty
-//   typst query examples/query-export.typ "heading" --field body
+//   typst eval --in examples/query-export.typ 'query(<doc-info>).first().value' --pretty
+//   typst eval --in examples/query-export.typ 'query(<doc-stats>).first().value' --pretty
+//   typst eval --in examples/query-export.typ 'query(<task>).map(it => it.value)' --pretty
+//   typst eval --in examples/query-export.typ 'query(heading).map(it => it.body)' --pretty
 //   typst compile examples/query-export.typ /dev/null -f pdf
 //
 // Multi-pass (inject total page count):
-//   PAGES=$(typst query examples/query-export.typ "<page-count>" --field value --one)
+//   PAGES=$(typst eval --in examples/query-export.typ 'query(<page-count>).first().value')
 //   typst compile examples/query-export.typ --input "total-pages=$PAGES"
 
 // --- Document metadata (plain, no context needed) ---

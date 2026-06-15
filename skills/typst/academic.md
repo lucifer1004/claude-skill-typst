@@ -78,6 +78,15 @@ Full list: https://typst.app/docs/reference/model/bibliography/
 #bibliography(("primary.bib", "secondary.bib"), style: "apa")
 ```
 
+### Multiple Bibliographies (Typst 0.15+)
+
+Use `target` or `group` to produce separate reference lists, for example primary sources vs. secondary sources. Keep a single bibliography when the venue expects one reference section.
+
+```typst
+#bibliography("refs.bib", title: [Primary Sources], target: <primary>)
+#bibliography("refs.bib", title: [Secondary Sources], target: <secondary>)
+```
+
 ## Equations
 
 ### Inline and Display Math

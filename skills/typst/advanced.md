@@ -136,7 +136,7 @@ State allows tracking information across a document. Requires `context` to read.
 
 ## Query System
 
-Query finds elements in the document. Requires `context`. For the CLI `typst query` command (extracting data as JSON, multi-pass compilation, CI integration), see [query.md](query.md).
+Query finds elements in the document. Requires `context`. For CLI introspection with `typst eval` (Typst 0.15+) or `typst query` (0.14 fallback), see [query.md](query.md).
 
 ### By Label
 
@@ -166,6 +166,21 @@ Query finds elements in the document. Requires `context`. For the CLI `typst que
 // Query specific heading level
 #context {
   let h1s = query(heading.where(level: 1))
+}
+```
+
+### Within an Ancestor (Typst 0.15+)
+
+Use `selector.within` to restrict matches to a section, figure, or other ancestor. This is especially useful for multi-document HTML bundles.
+
+```typst
+= Methods <sec:methods>
+
+== Setup
+
+#context {
+  let local = query(heading.where(level: 2).within(<sec:methods>))
+  [Method subsections: #local.len()]
 }
 ```
 
