@@ -5,6 +5,10 @@
 A skill that teaches AI agents how to work with Typst.
 Everything agent-facing lives under `skills/typst/`. The root `README.md` is for humans browsing GitHub, and `skills/typst/` should not contain a separate human-facing `README.md`.
 
+The current bundled skill targets Typst 0.15 by default. Keep the Typst 0.14.2
+compatibility path documented where it matters: legacy API search, `typst query`
+fallbacks, and the `typst-0.14.2` repository tag.
+
 ## Project Structure
 
 ```

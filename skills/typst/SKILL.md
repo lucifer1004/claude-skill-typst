@@ -5,6 +5,10 @@ description: 'Typst document creation and package development. Use when: (1) Wor
 
 # Typst
 
+This skill targets Typst 0.15+ by default. For Typst 0.14.2, use the
+`typst-0.14.2` repository tag for the previous skill snapshot, `typst query`
+for CLI introspection, or `--channel 0.14.2` with API search.
+
 ## Compilation
 
 ```bash
@@ -107,7 +111,7 @@ Copy the closest starter, adjust, compile. For CVs, letters, or slides, search p
 
 ## Dependencies
 
-- **typst CLI**: Install from https://typst.app or via package manager
+- **typst CLI 0.15+ recommended**: Install from https://typst.app or via package manager
   - macOS: `brew install typst`
   - Linux: `cargo install typst-cli`
   - Windows: `winget install typst`

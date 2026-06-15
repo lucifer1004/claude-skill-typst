@@ -1,6 +1,8 @@
 # Typst Skill for Claude Code
 
-A comprehensive skill for Typst document creation and package development.
+A comprehensive skill for Typst document creation and package development. The
+current main branch targets Typst 0.15 by default, with a Typst 0.14.2
+compatibility path for legacy users.
 
 ## Installation
 
@@ -68,6 +70,7 @@ just search-pkg "chart visualization"
 just search-api "image width fit"
 just search-api "rightarrow" --kind symbol   # LaTeX names work
 just search-api --name str.position -v       # Exact lookup
+just search-api "asset"                      # Typst 0.15 default API
 just search-api "path" --channel 0.14.2      # Typst 0.14 compatibility
 ```
 
@@ -91,9 +94,13 @@ Once installed, Claude Code will automatically activate this skill when:
 
 ## Requirements
 
-- [Typst CLI](https://typst.app) installed
+- [Typst CLI](https://typst.app) 0.15+ recommended
 - [just](https://just.systems) (optional, for development)
 - [pixi](https://pixi.sh) (optional, for development)
+
+For users who are still on Typst 0.14.2, use the `typst-0.14.2` repository tag
+for the previous skill snapshot or the `--channel 0.14.2` API search option on
+main.
 
 ## License
 
