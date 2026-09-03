@@ -52,6 +52,7 @@ Content goes here.
 | Tables, grids, cell spans, borders, data tables    | [tables.md](tables.md)         |
 | Academic papers, bibliography, theorems, equations | [academic.md](academic.md)     |
 | Convert from Markdown or LaTeX                     | [conversion.md](conversion.md) |
+| Upgrade older Typst code, 0.15 breaking changes    | [migration.md](migration.md)   |
 | Use Typst CLI commands and build options           | [cli.md](cli.md)               |
 | Extract data from documents, multi-pass builds     | [query.md](query.md)           |
 

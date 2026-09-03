@@ -70,6 +70,7 @@ This is enforced by `tests/test_structure.py`.
 
 ### For `.md` Reference Docs
 
+- **Write for strong models with stale knowledge.** Before adding content, ask: would a capable model already know this? Compress well-known basics to one-liners; spend lines on deltas, traps, and post-cutoff changes instead.
 - **Lead with the pattern, not the explanation.** Show the code first, explain after.
 - **No prose walls.** Tables, code blocks, and bullet points. Agents parse structure, not paragraphs.
 - **Cross-reference siblings.** Every doc should link to related docs in its first line.
