@@ -22,3 +22,9 @@ Thumbs.db
 
 # Typst build artifacts
 *.pdf
+evals/.env
+evals/bin/
+evals/jobs/
+
+# Harbor run outputs (manual runs from repo root)
+/jobs/

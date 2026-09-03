@@ -21,6 +21,7 @@ update it when a new minor release changes the upstream API.
 repo root (NOT bundled)               skills/typst/ (bundled skill)
 ├── tools/          # Data generation  ├── SKILL.md       # Entry point
 ├── tests/          # Test suite       ├── *.md           # Reference docs
+├── evals/          # Harbor eval tasks (local only, see evals/README.md)
 ├── .github/        # CI workflows     ├── agents/        # Agent definitions
 ├── Justfile        # Task runner      ├── scripts/       # Search & validation
 ├── pixi.toml       # Dependencies    ├── data/          # JSON indexes

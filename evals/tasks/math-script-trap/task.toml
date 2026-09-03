@@ -1,0 +1,19 @@
+schema_version = "1.4"
+
+[task]
+name = "claude-skill-typst/math-script-trap"
+version = "1.0.0"
+description = "Typeset alpha_c(N) without folding the argument into the subscript"
+authors = [{ name = "lucifer1004" }]
+keywords = ["typst", "math", "silent-render-trap"]
+
+[metadata]
+category = "typst-skill"
+difficulty = "easy"
+skill_relevance = "debug.md documents the script-swallows-call trap"
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 900.0

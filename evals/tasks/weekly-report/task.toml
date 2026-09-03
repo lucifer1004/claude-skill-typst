@@ -1,0 +1,19 @@
+schema_version = "1.4"
+
+[task]
+name = "claude-skill-typst/weekly-report"
+version = "1.0.0"
+description = "Compose a small report exercising several skill areas at once"
+authors = [{ name = "lucifer1004" }]
+keywords = ["typst", "document", "integration"]
+
+[metadata]
+category = "typst-skill"
+difficulty = "easy"
+skill_relevance = "general document authoring with tables and equations"
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 900.0

@@ -1,0 +1,6 @@
+[
+  { "name": "Widget", "price": 9.99, "stock": 120 },
+  { "name": "Gadget", "price": 19.5, "stock": 45 },
+  { "name": "Sprocket", "price": 3.75, "stock": 0 },
+  { "name": "Doohickey", "price": 12.0, "stock": 67 }
+]

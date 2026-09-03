@@ -1,0 +1,19 @@
+schema_version = "1.4"
+
+[task]
+name = "claude-skill-typst/data-json-table"
+version = "1.0.0"
+description = "Load a JSON file into a table (json.decode was removed in 0.15)"
+authors = [{ name = "lucifer1004" }]
+keywords = ["typst", "0.15", "data-loading"]
+
+[metadata]
+category = "typst-skill"
+difficulty = "easy"
+skill_relevance = "migration.md lists the *.decode removals"
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 900.0
