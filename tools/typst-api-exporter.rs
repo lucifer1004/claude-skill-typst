@@ -12,7 +12,7 @@ use std::path::PathBuf;
 
 use serde::Serialize;
 use typst::foundations::{
-    CastInfo, Func, NativeParamInfo, Repr, Scope, Symbol, Type, Value,
+    CastInfo, Func, NativeParamInfo, Repr, Scope, SilentBindingGuard, Symbol, Type, Value,
 };
 use typst::{Features, Library, LibraryExt};
 use typst_library::Category;
@@ -87,9 +87,18 @@ fn write_entries(out: &PathBuf, entries: &[ApiEntry]) {
 }
 
 fn export_entries() -> Vec<ApiEntry> {
-    let library = Library::builder().with_features(Features::all()).build();
+    let library = Library::builder([
+        typst_html::FORMAT,
+        typst_pdf::FORMAT,
+        typst_svg::FORMAT,
+        typst_render::FORMAT,
+        typst_bundle::FORMAT,
+    ])
+    .with_features(Features::all())
+    .build();
+    let guard = SilentBindingGuard::new(Features::all());
     let mut entries = Vec::new();
-    collect_scope(library.global.scope(), None, "", &mut entries);
+    collect_scope(library.global.scope(), None, "", &guard, &mut entries);
     entries
 }
 
@@ -97,22 +106,23 @@ fn collect_scope(
     scope: &Scope,
     inherited_category: Option<Category>,
     prefix: &str,
+    guard: &SilentBindingGuard,
     entries: &mut Vec<ApiEntry>,
 ) {
     for (name, binding) in scope.iter() {
-        let value = binding.read();
+        let Ok(value) = binding.read(guard) else { continue };
         let category = binding.category().or(inherited_category);
         let path = join_path(prefix, name.as_str());
 
         match value {
             Value::Func(func) => {
                 if let Some(category) = category {
-                    push_func(entries, &path, category, "function", func, None);
+                    push_func(entries, &path, category, "function", func, None, guard);
                 }
             }
             Value::Type(ty) => {
                 if let Some(category) = category {
-                    push_type(entries, &path, category, ty);
+                    push_type(entries, &path, category, ty, guard);
                 }
             }
             Value::Symbol(symbol) => {
@@ -121,14 +131,20 @@ fn collect_scope(
                 }
             }
             Value::Module(module) => {
-                collect_scope(module.scope(), category, &path, entries);
+                collect_scope(module.scope(), category, &path, guard, entries);
             }
             _ => {}
         }
     }
 }
 
-fn push_type(entries: &mut Vec<ApiEntry>, path: &str, category: Category, ty: &Type) {
+fn push_type(
+    entries: &mut Vec<ApiEntry>,
+    path: &str,
+    category: Category,
+    ty: &Type,
+    guard: &SilentBindingGuard,
+) {
     let name = ty.short_name().to_string();
     let route = route_for_top_level(category, path);
     entries.push(ApiEntry {
@@ -147,10 +163,10 @@ fn push_type(entries: &mut Vec<ApiEntry>, path: &str, category: Category, ty: &T
     });
 
     if let Ok(constructor) = ty.constructor() {
-        push_func(entries, &name, category, "constructor", &constructor, Some(&route));
+        push_func(entries, &name, category, "constructor", &constructor, Some(&route), guard);
     }
 
-    push_scoped_defs(entries, &name, category, ty.scope(), &route);
+    push_scoped_defs(entries, &name, category, ty.scope(), &route, guard);
 }
 
 fn push_func(
@@ -160,6 +176,7 @@ fn push_func(
     kind: &str,
     func: &Func,
     route_override: Option<&str>,
+    guard: &SilentBindingGuard,
 ) {
     let route = route_override
         .map(str::to_string)
@@ -189,7 +206,7 @@ fn push_func(
 
     if kind != "method" {
         if let Some(scope) = func.scope() {
-            push_scoped_defs(entries, &entry_name, category, scope, &route);
+            push_scoped_defs(entries, &entry_name, category, scope, &route, guard);
         }
     }
 }
@@ -200,11 +217,12 @@ fn push_scoped_defs(
     category: Category,
     scope: &Scope,
     route: &str,
+    guard: &SilentBindingGuard,
 ) {
     for (name, binding) in scope.iter() {
-        if let Value::Func(func) = binding.read() {
+        if let Ok(Value::Func(func)) = binding.read(guard) {
             let full_name = format!("{parent}.{name}");
-            push_func(entries, &full_name, category, "method", func, Some(route));
+            push_func(entries, &full_name, category, "method", func, Some(route), guard);
         }
     }
 }
@@ -376,6 +394,7 @@ fn category_title(category: Category) -> &'static str {
         Category::Symbols => "Symbols",
         Category::Text => "Text",
         Category::Visualize => "Visualize",
+        Category::Format => "Format",
         Category::Pdf => "PDF",
         Category::Html => "HTML",
         Category::Svg => "SVG",
@@ -393,7 +412,8 @@ fn category_weight(category: Category) -> f64 {
         | Category::Math
         | Category::Model
         | Category::Text
-        | Category::Visualize => 1.5,
+        | Category::Visualize
+        | Category::Format => 1.5,
         Category::Symbols => 1.0,
         Category::Pdf => 0.5,
         Category::Html => 0.3,

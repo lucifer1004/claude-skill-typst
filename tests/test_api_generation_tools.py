@@ -92,7 +92,8 @@ def test_typst_main_exporter_template_exists():
         source = f.read()
 
     assert "struct ApiEntry" in source
-    assert "Library::builder().with_features(Features::all()).build()" in source
+    assert "Library::builder([" in source
+    assert ".with_features(Features::all())" in source
     assert "write_entries" in source
 
 
