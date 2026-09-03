@@ -1,7 +1,7 @@
 FROM ubuntu:24.04
 
 RUN apt-get update \
- && apt-get install -y --no-install-recommends curl ca-certificates xz-utils python3 \
+ && apt-get install -y --no-install-recommends curl ca-certificates xz-utils python3 poppler-utils \
  && rm -rf /var/lib/apt/lists/*
 
 # Pin the Typst release under evaluation.

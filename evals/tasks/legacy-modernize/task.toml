@@ -1,0 +1,19 @@
+schema_version = "1.4"
+
+[task]
+name = "claude-skill-typst/legacy-modernize"
+version = "1.0.0"
+description = "Port a Typst 0.12 document past multiple removed APIs"
+authors = [{ name = "lucifer1004" }]
+keywords = ["typst", "0.15", "migration", "breaking-change"]
+
+[metadata]
+category = "typst-skill"
+difficulty = "medium"
+skill_relevance = "migration.md removal table"
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1200.0

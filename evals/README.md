@@ -44,6 +44,8 @@ uvx harbor run -p evals/tasks/math-script-trap -a oracle
 | `data-json-table`     | `json.decode` removed in 0.15                          | compiles + table + all rows rendered          |
 | `weekly-report`       | general authoring (headings, table, numbered equation) | `typst eval` structure assertions             |
 | `silent-audit`        | find and fix multiple silent traps in one draft        | per-trap MathML checks, partial credit        |
+| `legacy-modernize`    | port a 0.12 doc past 5 removed APIs                    | compiles + removed APIs gone + data intact    |
+| `template-build`      | reusable conference template with running header       | compiles + structure + `N / M` footer in PDF  |
 
 ## Calibration results (2026-09-03, subagent guinea pigs, Typst 0.15.1)
 
@@ -51,13 +53,19 @@ Tier-1 tasks (`math-script-trap` … `weekly-report`) are smoke tests: a strong
 model without the skill passes all five on the first or second attempt. They
 validate the harness, not the skill.
 
-`silent-audit` is the first task with demonstrated discriminative power:
+`silent-audit` is the only task so far with demonstrated discriminative power
+on pass/fail:
 
 | Variant         | Score | Notes                                                      |
 | --------------- | ----- | ---------------------------------------------------------- |
 | draft unchanged | 0.25  | only the false-alarm check passes                          |
 | base (no skill) | 0.75  | fraction trap "fixed" with `\(...\)` escapes — still wrong |
 | with skill      | 1.00  | SKILL.md routed the agent to debug.md's trap list          |
+
+`legacy-modernize` and `template-build` saturate on pass/fail for a strong
+model (both variants pass) but still differ on efficiency: base needed 3
+compile attempts vs 2 with skill on both tasks. For such tasks the useful
+signal is Harbor's turn/time/token stats, not the binary reward.
 
 New tasks should be calibrated the same way before being trusted: run a base
 subagent first; if it passes easily, the task measures the harness, not the

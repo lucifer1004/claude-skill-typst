@@ -1,0 +1,19 @@
+schema_version = "1.4"
+
+[task]
+name = "claude-skill-typst/template-build"
+version = "1.0.0"
+description = "Build a reusable conference-paper template with dynamic header and N/M footer"
+authors = [{ name = "lucifer1004" }]
+keywords = ["typst", "template", "long-horizon"]
+
+[metadata]
+category = "typst-skill"
+difficulty = "medium"
+skill_relevance = "template.md + context/query patterns"
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1200.0
