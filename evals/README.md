@@ -58,11 +58,16 @@ validate the harness, not the skill.
 `silent-audit` is the only task so far with demonstrated discriminative power
 on pass/fail:
 
-| Variant         | Score | Notes                                                      |
-| --------------- | ----- | ---------------------------------------------------------- |
-| draft unchanged | 0.25  | only the false-alarm check passes                          |
-| base (no skill) | 0.75  | fraction trap "fixed" with `\(...\)` escapes — still wrong |
-| with skill      | 1.00  | SKILL.md routed the agent to debug.md's trap list          |
+| Variant                 | Score | Notes                                                             |
+| ----------------------- | ----- | ----------------------------------------------------------------- |
+| draft unchanged         | 0.25  | only the false-alarm check passes                                 |
+| MiniMax-M2.7 base       | 0.50  | fixed only the en-dash; also "fixed" the false alarm (mangled it) |
+| strong-model base       | 0.75  | fraction trap "fixed" with `\(...\)` escapes — still wrong        |
+| strong-model with skill | 1.00  | SKILL.md routed the agent to debug.md's trap list                 |
+
+The base column also scales with model strength, which is the desired
+property: the task separates both on skill availability and on model
+capability.
 
 `legacy-modernize` and `template-build` saturate on pass/fail for a strong
 model (both variants pass) but still differ on efficiency: base needed 3
