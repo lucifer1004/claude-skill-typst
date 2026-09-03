@@ -95,6 +95,15 @@ $ integral_0^infinity e^(-x) dif x = 1 $
 | `\citet{key}`, `\textcite{key}` | `#cite(<key>, form: "prose")`                               |
 | `\arrow`, alt forms             | `arrow.r.squiggly`, `arrow.l.long`, etc. (symbol modifiers) |
 
+### Sub/superscript gotcha when porting
+
+Transcribing `\alpha_c(N=40)` verbatim gives `alpha_c(N=40)`, which Typst reads
+as subscript `c(N=40)` — a `(` right after a letter/string script is swallowed
+as a function call. Put a space before the paren: `alpha_c (N=40)`. This is one
+of several silent LaTeX→Typst math traps (fractions, `"--"`, en-dashes); see
+[debug.md](debug.md) ("Common Errors & Symbol Gotchas") for the full list, and
+[academic.md](academic.md) (Equations) for the authoring-path cheat sheet.
+
 ### Math Examples
 
 ```typst
