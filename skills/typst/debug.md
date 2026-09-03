@@ -8,10 +8,10 @@ Recurring failures hit when authoring math-heavy documents. Each cost a compile 
 
 ### Math symbols that don't exist under the name you'd guess
 
-| You wrote | Error | Correct |
-|---|---|---|
-| `angle.l` / `angle.r` (for ⟨ ⟩) | `unknown symbol modifier` | `chevron.l` / `chevron.r` (or literal `⟨ ⟩` inside `lr(...)`) |
-| `check(x)` (háček accent) | `unknown variable: check` | `caron(x)` — the check/háček accent is named `caron` |
+| You wrote                                   | Error                     | Correct                                                                        |
+| ------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------ |
+| `angle.l` / `angle.r` (for ⟨ ⟩)             | `unknown symbol modifier` | `chevron.l` / `chevron.r` (or literal `⟨ ⟩` inside `lr(...)`)                  |
+| `check(x)` (háček accent)                   | `unknown variable: check` | `caron(x)` — the check/háček accent is named `caron`                           |
 | `times.circle` / `times.circle.big` (for ⊗) | `unknown symbol modifier` | literal `⊗` glyph in the source. **Not** `product.co` (that's the coproduct ∐) |
 
 General rule: when a `symbol.modifier` chain errors with *"unknown symbol modifier"*, the modifier path is wrong — verify against the API data (`scripts/search-api.py`) or just paste the literal Unicode glyph into the math, which always works. Math accent functions are `hat, tilde, macron/overline, dot, dot.double, acute, grave, breve, circle, caron, arrow` — there is **no** `check`, `bar` is `macron`, etc.
@@ -34,7 +34,7 @@ $ alpha_c^"glob" (kappa) $        // (a) a SPACE after the script  <- simplest, 
 $ alpha_c^("glob")(kappa) $       // (b) parenthesize the script BASE, closing it
 ```
 
-Note: only a **digit** subscript is safe — `F_2(kappa)`, `L_2(x)` — because a number isn't callable; that is why `F_2(kappa)` renders fine but `alpha_c(N)` does not. A following superscript also closes a subscript, so `A_alpha^((n))[...]` is fine; and when the call-glyph *is* the intended subscript (`nabla_frak(M)` → ∇_𝔐) the folding is what you want. Otherwise always put a space (or parens) before an argument that follows a letter or string script. Grep for the bug: `grep -noE '(\^|_)("[^"]*"|[A-Za-z]+)[([]' file.typ`.
+Note: only a **digit** subscript is safe — `F_2(kappa)`, `L_2(x)` — because a number isn't callable; that is why `F_2(kappa)` renders fine but `alpha_c(N)` does not. A following superscript also closes a subscript, so `A_alpha^((n))[...]` is fine; and when the call-glyph *is* the intended subscript (`nabla_frak(M)` → ∇\_𝔐) the folding is what you want. Otherwise always put a space (or parens) before an argument that follows a letter or string script. Grep for the bug: `grep -noE '(\^|_)("[^"]*"|[A-Za-z]+)[([]' file.typ`.
 
 **False alarms — leave these alone.** A script whose base is *already a parenthesised group* is closed, so a following `(…)`/`[…]` stays at baseline and does **not** swallow. Verified by PNG-stacking the pairs: `bb(E)_(nu_n)[v v^top]` and `Phi^(-1)(x)` render *identically* with or without an inserted space. So the two commonest-looking "offenders" are not bugs and must not be "fixed": expectation brackets `bb(E)_(nu_n)[…]` and inverse-function args `Phi^(-1)(x)`. The grep above already excludes paren-group scripts (`_(...)`); reach for the space/paren fix only when the base is a bare letter or a `"quoted"` word (e.g. `delta r_"op"(a)` → `delta r_"op" (a)`).
 
@@ -73,7 +73,14 @@ Relative image paths resolve against the `.typ` file but must stay inside `--roo
 
 ### BibTeX LaTeX accents the Hayagriva parser can't read
 
-`bibliography("refs.bib")` handles most LaTeX accents (`{\"u}`→ü, `{\H{o}}`→ő, `{\v{c}}`→č, `{\`e}`→è) but chokes on the dotless-i combo `{\"\i}`, rendering a literal `Ma\ida`. Paste the Unicode character directly into the `.bib` (`Maïda`, `Mylène`). When a name renders with a stray backslash, this is why.
+`bibliography("refs.bib")` handles most LaTeX accents (`{\"u}`→ü, `{\H{o}}`→ő, `{\v{c}}`→č, ``  {\`e} ``→è) but chokes on the dotless-i combo, rendering a literal backslash:
+
+```bibtex
+author = {Ma{\"\i}da}   % WRONG: renders as "Ma\ida"
+author = {Maïda}        % RIGHT: paste the Unicode character
+```
+
+When a name renders with a stray backslash, this is why.
 
 ### Fast way to settle a rendering question
 
