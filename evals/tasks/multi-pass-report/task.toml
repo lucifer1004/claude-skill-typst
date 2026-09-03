@@ -1,0 +1,19 @@
+schema_version = "1.4"
+
+[task]
+name = "claude-skill-typst/multi-pass-report"
+version = "1.0.0"
+description = "Page X of N footer via counter(page).final() in context"
+authors = [{ name = "lucifer1004" }]
+keywords = ["typst", "context", "introspection"]
+
+[metadata]
+category = "typst-skill"
+difficulty = "medium"
+skill_relevance = "query.md multi-pass + advanced.md context patterns"
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1200.0

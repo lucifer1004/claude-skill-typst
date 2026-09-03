@@ -46,6 +46,8 @@ uvx harbor run -p evals/tasks/math-script-trap -a oracle
 | `silent-audit`        | find and fix multiple silent traps in one draft        | per-trap MathML checks, partial credit        |
 | `legacy-modernize`    | port a 0.12 doc past 5 removed APIs                    | compiles + removed APIs gone + data intact    |
 | `template-build`      | reusable conference template with running header       | compiles + structure + `N / M` footer in PDF  |
+| `package-integration` | add a Gantt chart from Typst Universe                  | compiles + task names and timeline in PDF     |
+| `multi-pass-report`   | "Page X of N" footer computed from the document        | per-page footer text matches real page count  |
 
 ## Calibration results (2026-09-03, subagent guinea pigs, Typst 0.15.1)
 
@@ -64,8 +66,11 @@ on pass/fail:
 
 `legacy-modernize` and `template-build` saturate on pass/fail for a strong
 model (both variants pass) but still differ on efficiency: base needed 3
-compile attempts vs 2 with skill on both tasks. For such tasks the useful
-signal is Harbor's turn/time/token stats, not the binary reward.
+compile attempts vs 2 with skill on both tasks. `package-integration` and
+`multi-pass-report` also saturate — base passed both on the first attempt,
+choosing the right Universe package (gantty) without the index. For such
+tasks the useful signal is Harbor's turn/time/token stats, not the binary
+reward.
 
 New tasks should be calibrated the same way before being trusted: run a base
 subagent first; if it passes easily, the task measures the harness, not the

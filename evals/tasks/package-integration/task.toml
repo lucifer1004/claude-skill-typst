@@ -1,0 +1,19 @@
+schema_version = "1.4"
+
+[task]
+name = "claude-skill-typst/package-integration"
+version = "1.0.0"
+description = "Add a Gantt chart using a Typst Universe package"
+authors = [{ name = "lucifer1004" }]
+keywords = ["typst", "package", "ecosystem"]
+
+[metadata]
+category = "typst-skill"
+difficulty = "medium"
+skill_relevance = "package.md + scripts/search-packages.py"
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1200.0
