@@ -27,6 +27,11 @@ fi
 tasks=("$@")
 [[ ${#tasks[@]} -eq 0 ]] && tasks=(tasks/*/)
 
+# Harbor tasks are self-contained: sync the canonical Dockerfile into each task.
+for task in "${tasks[@]}"; do
+  cp Dockerfile.base "$task/environment/Dockerfile"
+done
+
 printf '%-22s %-6s %s\n' TASK VARIANT REWARD
 for variant in base skill; do
   for task in "${tasks[@]}"; do
@@ -41,7 +46,7 @@ for variant in base skill; do
     fi
     job_dir=$(printf '%s\n' "$out" | grep -oE 'jobs/[^ ]+' | head -1)
     reward=$(python3 -c "
-import json, sys
+import json
 try:
     d = json.load(open('$job_dir/result.json'))
     for v in d.get('stats', {}).get('evals', {}).values():
