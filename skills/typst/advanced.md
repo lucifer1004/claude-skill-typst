@@ -136,7 +136,7 @@ State allows tracking information across a document. Requires `context` to read.
 
 ## Query System
 
-Query finds elements in the document. Requires `context`. For CLI introspection with `typst eval` (Typst 0.15+) or `typst query` (0.14 fallback), see [query.md](query.md).
+Query finds elements in the document. Requires `context`. For CLI introspection with `typst eval`, see [query.md](query.md).
 
 ### By Label
 

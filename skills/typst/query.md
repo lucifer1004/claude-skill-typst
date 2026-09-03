@@ -1,8 +1,8 @@
-# CLI Introspection (`typst eval` / `typst query`)
+# CLI Introspection (`typst eval`)
 
 For the in-document `query()` function, see [advanced.md](advanced.md). For language basics, see [basics.md](basics.md).
 
-Use `typst eval --in <file>` on Typst 0.15+. It evaluates a Typst expression in a document context and serializes the result as JSON or YAML. `typst query` is deprecated in Typst 0.15, but remains the 0.14 fallback.
+Use `typst eval --in <file>` (Typst 0.15+). It evaluates a Typst expression in a document context and serializes the result as JSON or YAML.
 
 ## Version Check
 
@@ -10,12 +10,9 @@ Use `typst eval --in <file>` on Typst 0.15+. It evaluates a Typst expression in 
 typst --version
 ```
 
-| Version | Preferred command                  |
-| ------- | ---------------------------------- |
-| 0.15+   | `typst eval --in doc.typ '...'`    |
-| 0.14.x  | `typst query doc.typ "<selector>"` |
+This guide assumes Typst 0.15+; `typst query` is deprecated since 0.15.
 
-## Typst 0.15+: `typst eval`
+## `typst eval`
 
 ```bash
 typst eval --in doc.typ 'query(heading).len()'
@@ -37,22 +34,6 @@ Use `typst eval` for expression probes too:
 typst eval '1 + 2'
 typst eval 'type("hi")'
 ```
-
-## 0.14 Fallback: `typst query`
-
-```bash
-typst query [OPTIONS] <INPUT> <SELECTOR>
-```
-
-`typst query` accepts element selectors and labels:
-
-```bash
-typst query doc.typ "heading"
-typst query doc.typ "figure"
-typst query doc.typ "<doc-info>" --field value --one --pretty
-```
-
-The useful 0.14 options are `--field`, `--one`, `--format json|yaml`, `--pretty`, `--input`, and `--root`.
 
 ## Selectors
 
@@ -99,13 +80,6 @@ typst eval --in doc.typ 'query(<version>).first().value'
 
 typst eval --in doc.typ 'query(<doc-info>).first().value' --pretty
 # -> {"title": "Report", "status": "draft"}
-```
-
-### 0.14 equivalent
-
-```bash
-typst query doc.typ "<version>" --field value --one
-typst query doc.typ "<doc-info>" --field value --one --pretty
 ```
 
 ## Type Mapping

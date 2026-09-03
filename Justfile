@@ -72,28 +72,6 @@ fetch-api-main entries_path:
         --output-stem api-main \
         --out-dir skills/typst/data
 
-# Build Typst v0.14.2 docs and refresh the stable API index
-fetch-api-stable-from-source:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    rm -rf /tmp/typst-repo /tmp/typst-docs-assets /tmp/typst-api-raw.json
-    echo "Cloning typst..."
-    git clone --depth 1 --branch v0.14.2 https://github.com/typst/typst /tmp/typst-repo 2>&1 | tail -1
-    echo "Building typst-docs..."
-    cd /tmp/typst-repo && cargo build -p typst-docs --release 2>&1 | tail -1
-    echo "Generating JSON..."
-    mkdir -p /tmp/typst-docs-assets
-    /tmp/typst-repo/target/release/typst-docs \
-        --assets-dir /tmp/typst-docs-assets \
-        --out-file /tmp/typst-api-raw.json
-    echo "Building index..."
-    pixi run python tools/fetch-api-docs.py /tmp/typst-api-raw.json \
-        --output-stem api-0.14.2 \
-        --out-dir skills/typst/data
-    cp skills/typst/data/api-0.14.2.json skills/typst/data/api.json
-    cp skills/typst/data/api-0.14.2-bm25.json skills/typst/data/api-bm25.json
-    rm -rf /tmp/typst-repo /tmp/typst-docs-assets /tmp/typst-api-raw.json
-
 # Build Typst main docs exporter and refresh the API preview index
 fetch-api-main-from-source:
     #!/usr/bin/env bash

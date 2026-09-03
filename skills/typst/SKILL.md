@@ -5,9 +5,8 @@ description: 'Typst document creation and package development. Use when: (1) Wor
 
 # Typst
 
-This skill targets Typst 0.15+ by default. For Typst 0.14.2, use the
-`typst-0.14.2` repository tag for the previous skill snapshot, `typst query`
-for CLI introspection, or `--channel 0.14.2` with API search.
+This skill targets Typst 0.15+. For Typst 0.14.2, use the `typst-0.14.2`
+repository tag for the previous skill snapshot.
 
 ## Compilation
 
@@ -117,7 +116,7 @@ Copy the closest starter, adjust, compile. For CVs, letters, or slides, search p
   - Windows: `winget install typst`
 - **pdftotext** (optional): For text-level output verification
 - **Python 3.10+** (optional): For package search and validation scripts
-- **jq** (optional): For parsing JSON output from `typst eval` or `typst query` in shell scripts
+- **jq** (optional): For parsing JSON output from `typst eval` in shell scripts
 
 ## API Reference Search
 
@@ -128,7 +127,6 @@ python3 scripts/search-api.py "image width fit"
 python3 scripts/search-api.py "color lighten" --kind method
 python3 scripts/search-api.py --name str.position -v
 python3 scripts/search-api.py "rightarrow" --kind symbol   # LaTeX names work
-python3 scripts/search-api.py "path" --channel 0.14.2      # legacy Typst 0.14 API
 python3 scripts/search-api.py --list-categories
 ```
 

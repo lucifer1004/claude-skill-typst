@@ -68,16 +68,16 @@ def test_fetch_api_docs_writes_custom_stem_from_normalized_entries(
     assert json.loads(bm25_path.read_text(encoding="utf-8"))["meta"]["num_docs"] == 1
 
 
-def test_search_api_resolves_stable_legacy_and_main_channel_paths(tmp_path):
+def test_search_api_resolves_channel_paths(tmp_path):
     search_api = _load_module("search_api", SEARCH_SCRIPT)
 
     assert search_api.resolve_index_paths(str(tmp_path), "stable") == (
         os.path.join(str(tmp_path), "api.json"),
         os.path.join(str(tmp_path), "api-bm25.json"),
     )
-    assert search_api.resolve_index_paths(str(tmp_path), "0.14.2") == (
-        os.path.join(str(tmp_path), "api-0.14.2.json"),
-        os.path.join(str(tmp_path), "api-0.14.2-bm25.json"),
+    assert search_api.resolve_index_paths(str(tmp_path), "0.15.0") == (
+        os.path.join(str(tmp_path), "api-0.15.0.json"),
+        os.path.join(str(tmp_path), "api-0.15.0-bm25.json"),
     )
     assert search_api.resolve_index_paths(str(tmp_path), "main") == (
         os.path.join(str(tmp_path), "api-main.json"),

@@ -13,7 +13,7 @@ For full option lists, run `typst <command> --help`. This page is a routing inde
 | Task                                                                                                   | Use                      |
 | ------------------------------------------------------------------------------------------------------ | ------------------------ |
 | Validate or inspect rendered output                                                                    | [debug.md](debug.md)     |
-| Use `typst eval` / `typst query`, metadata export, or multi-pass builds                                | [query.md](query.md)     |
+| Use `typst eval`, metadata export, or multi-pass builds                                                | [query.md](query.md)     |
 | Fix project-root or `/absolute/path` import issues                                                     | [basics.md](basics.md)   |
 | Configure fonts, variable axes, `typst fonts --variants`, or `--font-path`                             | [styling.md](styling.md) |
 | Profile with `--timings`                                                                               | [perf.md](perf.md)       |
@@ -64,15 +64,9 @@ Use `@local/...` with `--package-path` when testing templates before publication
 - `-` means stdin for input and stdout for output, but writing PDF/PNG bytes to a terminal is rarely useful.
 - Multi-page PNG/SVG outputs need a template such as `page-{p}.png`; `{0p}` pads page numbers and `{t}` inserts total page count.
 - `--pages` uses one-indexed physical page numbers, not the document's printed page counter.
-- `watch` is for human feedback loops; use `compile`, `eval`, or 0.14 `query` in CI.
+- `watch` is for human feedback loops; use `compile` or `eval` in CI.
 - `typst completions <shell>` exists for shell setup, but agents normally do not need it.
-
-## 0.14 Compatibility
-
-- Use `typst query` instead of `typst eval`; see [query.md](query.md).
-- Search legacy APIs with `python3 scripts/search-api.py "path" --channel 0.14.2`.
-- The `typst-0.14.2` repository tag freezes the old skill snapshot.
 
 ## When to Read Help
 
-Use `typst compile --help`, `typst watch --help`, `typst eval --help`, `typst query --help`, or `typst init --help` when you need the complete current option list. This page is intentionally not a mirror of those outputs.
+Use `typst compile --help`, `typst watch --help`, `typst eval --help`, or `typst init --help` when you need the complete current option list. This page is intentionally not a mirror of those outputs.

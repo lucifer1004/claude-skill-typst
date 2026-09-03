@@ -5,9 +5,9 @@
 A skill that teaches AI agents how to work with Typst.
 Everything agent-facing lives under `skills/typst/`. The root `README.md` is for humans browsing GitHub, and `skills/typst/` should not contain a separate human-facing `README.md`.
 
-The current bundled skill targets Typst 0.15 by default. Keep the Typst 0.14.2
-compatibility path documented where it matters: legacy API search, `typst query`
-fallbacks, and the `typst-0.14.2` repository tag.
+The current bundled skill targets Typst 0.15+. Typst 0.14.2 support was
+dropped; the `typst-0.14.2` repository tag freezes the last compatible
+snapshot.
 
 ## Project Structure
 
@@ -108,7 +108,7 @@ Track new features here. Move to the relevant `.md` once implemented.
 - [x] **API reference search**: BM25 index with LaTeX symbol aliases, weekly CI refresh
 - [x] **Tables and grids guide**: `tables.md`
 - [x] **Academic writing guide**: `academic.md`
-- [x] **CLI introspection guide**: `query.md` for `typst eval` / `typst query`, metadata export, multi-pass
+- [x] **CLI introspection guide**: `query.md` for `typst eval`, metadata export, multi-pass
 - [x] **Content introspection**: `advanced.md` section on `func()`, `fields()`, show rule decomposition
 - [x] **Ecosystem tooling**: tinymist, typstyle, typst-package-check, tytanic in `package.md`
 - [x] **Specialized agents**: `typst-verify`, `typst-package-qa`
