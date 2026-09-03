@@ -8,6 +8,9 @@ on:
 permissions:
   contents: write
 
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   update-index:
     runs-on: ubuntu-latest
@@ -39,18 +42,53 @@ jobs:
             --output-stem api-main \
             --out-dir skills/typst/data
 
+      - name: Resolve latest Typst release
+        id: release
+        run: |
+          tag=$(gh api repos/typst/typst/releases/latest --jq .tag_name)
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
+
+      # The stable exporter must compile against the latest release tag.
+      # Only rebuild when a new release appears; otherwise just realign the
+      # stable alias (api.json) with the latest versioned index.
+      - name: Build stable API index and BM25
+        env:
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+          RELEASE_VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          stem="api-${RELEASE_VERSION}"
+          if [ ! -f "skills/typst/data/${stem}.json" ]; then
+            rm -rf /tmp/typst-release
+            git clone --depth 1 --branch "$RELEASE_TAG" \
+              https://github.com/typst/typst /tmp/typst-release
+            mkdir -p /tmp/typst-release/docs/src/bin
+            cp tools/typst-api-exporter-stable.rs \
+              /tmp/typst-release/docs/src/bin/export-api.rs
+            (cd /tmp/typst-release && \
+              cargo run -p typst-docs --bin export-api --release -- \
+              --out /tmp/typst-api-stable-entries.json)
+            python3 tools/fetch-api-docs.py /tmp/typst-api-stable-entries.json \
+              --input-format entries \
+              --output-stem "$stem" \
+              --out-dir skills/typst/data
+          fi
+          cp "skills/typst/data/${stem}.json" skills/typst/data/api.json
+          cp "skills/typst/data/${stem}-bm25.json" skills/typst/data/api-bm25.json
+
       - name: Normalize formatting
         run: |
           pip install prek
-          prek run --files skills/typst/data/api-main.json skills/typst/data/api-main-bm25.json || true
+          prek run --files skills/typst/data/*.json || true
 
       - name: Commit if changed
         run: |
-          if [ -z "$(git status --porcelain -- skills/typst/data/api-main.json skills/typst/data/api-main-bm25.json)" ]; then
+          if [ -z "$(git status --porcelain -- skills/typst/data)" ]; then
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add skills/typst/data/api-main.json skills/typst/data/api-main-bm25.json
-          git commit -m "data: update main API index"
+          git add skills/typst/data
+          git commit -m "data: update API indexes"
           git push

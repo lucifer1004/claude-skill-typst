@@ -39,16 +39,23 @@ def resolve_data_dir(override):
 
 def resolve_index_paths(data_dir, channel):
     """Return (api_path, bm25_path) for an API data channel."""
-    stems = {
-        "stable": "api",
-        "0.15.0": "api-0.15.0",
-        "main": "api-main",
-    }
-    stem = stems[channel]
+    stems = {"stable": "api", "main": "api-main"}
+    stem = stems.get(channel, f"api-{channel}")
     return (
         os.path.join(data_dir, f"{stem}.json"),
         os.path.join(data_dir, f"{stem}-bm25.json"),
     )
+
+
+def list_channels(data_dir):
+    """List available channels: stable/main aliases plus versioned indexes."""
+    versions = set()
+    for name in os.listdir(data_dir):
+        if name.startswith("api-") and name.endswith(".json"):
+            version = name[len("api-") : -len(".json")]
+            if version not in ("main", "bm25") and not version.endswith("-bm25"):
+                versions.add(version)
+    return ["stable", "main"] + sorted(versions)
 
 
 def bm25_search(query_tokens, bm25, top_n=20):
@@ -157,13 +164,19 @@ def main():
     parser.add_argument("--data-dir", help="Override data directory")
     parser.add_argument(
         "--channel",
-        choices=["stable", "0.15.0", "main"],
         default="stable",
-        help="API data channel: stable release alias or upstream main preview",
+        help="API data channel: stable (latest release), main (upstream preview), "
+        "or a version like 0.15.0",
     )
     args = parser.parse_args()
 
     data_dir = resolve_data_dir(args.data_dir)
+    if args.channel not in list_channels(data_dir):
+        print(
+            f"Unknown channel '{args.channel}'. Available: {', '.join(list_channels(data_dir))}",
+            file=sys.stderr,
+        )
+        sys.exit(1)
     api_path, bm25_path = resolve_index_paths(data_dir, args.channel)
     api = load_json(api_path)
 

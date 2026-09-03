@@ -97,7 +97,7 @@ def test_typst_main_exporter_template_exists():
     assert "write_entries" in source
 
 
-def test_update_api_workflow_generates_main_channel_only():
+def test_update_api_workflow_generates_main_and_stable_channels():
     workflow_path = os.path.join(ROOT, ".github", "workflows", "update-api.yml")
 
     with open(workflow_path, "r", encoding="utf-8") as f:
@@ -106,5 +106,8 @@ def test_update_api_workflow_generates_main_channel_only():
     assert "tools/typst-api-exporter.rs" in workflow
     assert "--input-format entries" in workflow
     assert "--output-stem api-main" in workflow
-    assert "skills/typst/data/api-main.json" in workflow
-    assert "skills/typst/data/api.json" not in workflow
+    assert "git add skills/typst/data" in workflow
+    # stable channel follows the latest upstream release
+    assert "tools/typst-api-exporter-stable.rs" in workflow
+    assert "repos/typst/typst/releases/latest" in workflow
+    assert "skills/typst/data/api.json" in workflow

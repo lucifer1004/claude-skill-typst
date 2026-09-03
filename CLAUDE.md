@@ -9,6 +9,12 @@ The current bundled skill targets Typst 0.15+. Typst 0.14.2 support was
 dropped; the `typst-0.14.2` repository tag freezes the last compatible
 snapshot.
 
+The stable API index (`data/api.json`) auto-follows the latest Typst release
+via `.github/workflows/update-api.yml`. Two exporter variants live in `tools/`:
+`typst-api-exporter.rs` tracks upstream `main`, while
+`typst-api-exporter-stable.rs` must compile against the latest release tag —
+update it when a new minor release changes the upstream API.
+
 ## Project Structure
 
 ```

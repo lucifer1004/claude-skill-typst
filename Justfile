@@ -72,6 +72,32 @@ fetch-api-main entries_path:
         --output-stem api-main \
         --out-dir skills/typst/data
 
+# Build latest release docs exporter and refresh the stable API index
+fetch-api-stable-from-source:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    tag=$(curl -s https://api.github.com/repos/typst/typst/releases/latest \
+        | pixi run python -c 'import json,sys; print(json.load(sys.stdin)["tag_name"])')
+    version=${tag#v}
+    echo "Latest release: $tag"
+    rm -rf /tmp/typst-repo /tmp/typst-api-stable-entries.json
+    echo "Cloning typst $tag..."
+    git clone --depth 1 --branch "$tag" https://github.com/typst/typst /tmp/typst-repo 2>&1 | tail -1
+    echo "Installing exporter..."
+    mkdir -p /tmp/typst-repo/docs/src/bin
+    cp tools/typst-api-exporter-stable.rs /tmp/typst-repo/docs/src/bin/export-api.rs
+    echo "Exporting entries..."
+    cd /tmp/typst-repo && cargo run -p typst-docs --bin export-api --release -- \
+        --out /tmp/typst-api-stable-entries.json
+    echo "Building index..."
+    pixi run python tools/fetch-api-docs.py /tmp/typst-api-stable-entries.json \
+        --input-format entries \
+        --output-stem "api-$version" \
+        --out-dir skills/typst/data
+    cp "skills/typst/data/api-$version.json" skills/typst/data/api.json
+    cp "skills/typst/data/api-$version-bm25.json" skills/typst/data/api-bm25.json
+    rm -rf /tmp/typst-repo /tmp/typst-api-stable-entries.json
+
 # Build Typst main docs exporter and refresh the API preview index
 fetch-api-main-from-source:
     #!/usr/bin/env bash
