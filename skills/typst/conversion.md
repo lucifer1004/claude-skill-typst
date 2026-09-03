@@ -45,8 +45,6 @@ Typst is "batteries included" — most common LaTeX packages are built in:
 | `\newcommand{\foo}{...}`          | `#let foo = ...` or `#let foo(x) = ...`       |
 | `\textbf{x}` (style-only, no tag) | `#text(weight: "bold")[x]` — style only       |
 | Semantic strong emphasis          | `*x*` or `#strong[x]` — tagged for a11y       |
-| `\emph{x}` (semantic)             | `_x_` or `#emph[x]`                           |
-| `\textit{x}` (style-only)         | `#text(style: "italic")[x]`                   |
 | `\bfseries` (declaration-style)   | `#set text(weight: "bold")` in current scope  |
 | `\textsc{x}`                      | `#smallcaps[x]`                               |
 | `\left( ... \right)`              | Auto-scaling in math; use `lr(( ))` to force  |
@@ -68,17 +66,7 @@ Reproduces the Computer Modern / justified / tight-leading look of a classic LaT
 
 ## Math Conversion
 
-### Inline vs Display Math
-
-```typst
-// Inline math
-The formula $a + b = c$ is simple.
-
-// Display math
-$ integral_0^infinity e^(-x) dif x = 1 $
-```
-
-### Common Conversions
+Inline math: `$a + b = c$`. Display math (spaced dollar signs): `$ integral_0^infinity e^(-x) dif x = 1 $`.
 
 | LaTeX                           | Typst                                                       |
 | ------------------------------- | ----------------------------------------------------------- |
@@ -104,26 +92,6 @@ of several silent LaTeX→Typst math traps (fractions, `"--"`, en-dashes); see
 [debug.md](debug.md) ("Common Errors & Symbol Gotchas") for the full list, and
 [academic.md](academic.md) (Equations) for the authoring-path cheat sheet.
 
-### Math Examples
-
-```typst
-// Fraction
-$ frac(a + b, c) $
-
-// Matrix
-$ mat(1, 2; 3, 4) $
-
-// Cases
-$ f(x) = cases(
-  x^2 "if" x > 0,
-  0 "otherwise"
-) $
-
-// Aligned equations
-$ a &= b + c \
-  &= d + e $
-```
-
 ### Using mitex for LaTeX Math
 
 For complex LaTeX math, use the mitex package:
@@ -131,16 +99,13 @@ For complex LaTeX math, use the mitex package:
 ```typst
 #import "@preview/mitex:0.2.6": mitex, mi
 
-// Display math
-#mitex(`\frac{\partial f}{\partial x}`)
-
-// Inline math
-The value is #mi(`\alpha + \beta`).
+#mitex(`\frac{\partial f}{\partial x}`)   // display math
+The value is #mi(`\alpha + \beta`).        // inline math
 ```
 
 ## Code Blocks
 
-Inline code uses backticks (same as Markdown). Fenced code blocks use triple backticks with language name. For programmatic raw content:
+Inline code uses backticks (same as Markdown). Fenced blocks use triple backticks with a language name. For programmatic raw content:
 
 ```typst
 #raw("print('hello')", lang: "python", block: true)
@@ -148,37 +113,12 @@ Inline code uses backticks (same as Markdown). Fenced code blocks use triple bac
 
 ## Tables
 
-```typst
-#table(
-  columns: (auto, 1fr, 1fr),
-  align: (left, center, right),
-
-  // Header row
-  [*Name*], [*Value*], [*Unit*],
-
-  // Data rows
-  [Length], [10], [cm],
-  [Width], [5], [cm],
-)
-```
-
-### From Markdown Tables
-
-Markdown:
-
-```markdown
-| Name | Value |
-| ---- | ----- |
-| A    | 1     |
-| B    | 2     |
-```
-
-Typst:
+Markdown tables have no direct markup equivalent; use `table()`:
 
 ```typst
 #table(
-  columns: 2,
-  [*Name*], [*Value*],
+  columns: (auto, 1fr),
+  [*Name*], [*Value*],   // header row
   [A], [1],
   [B], [2],
 )
@@ -192,38 +132,16 @@ Typst:
   caption: [A diagram showing the process],
 ) <fig:diagram>
 
-// Reference
 See @fig:diagram for details.
 ```
 
 ## Block Elements
 
-### Quotes
-
 ```typst
-#quote(block: true)[
-  To be or not to be.
-]
+// Quote with attribution
+#quote(block: true, attribution: [Shakespeare])[To be or not to be.]
 
-// With attribution
-#quote(block: true, attribution: [Shakespeare])[
-  To be or not to be.
-]
-```
-
-### Admonitions / Callouts
-
-```typst
-// Simple box
-#block(
-  fill: luma(240),
-  inset: 1em,
-  radius: 4pt,
-)[
-  *Note:* Important information here.
-]
-
-// Custom admonition function
+// Admonition / callout via a custom function
 #let note(body) = block(
   fill: rgb("#e8f4f8"),
   inset: 1em,
@@ -236,9 +154,7 @@ See @fig:diagram for details.
 
 ## Escaping Rules
 
-### Special Characters
-
-Characters requiring escape with backslash:
+Characters requiring escape with backslash in markup:
 
 | Character | Escape   | Purpose       |
 | --------- | -------- | ------------- |
@@ -253,20 +169,9 @@ Characters requiring escape with backslash:
 | `` ` ``   | `` \` `` | Raw text      |
 | `\`       | `\\`     | Escape char   |
 
-### In Raw Strings
-
-Inside `#raw("...")`, only escape:
-
-- `\` → `\\`
-- `"` → `\"`
-
-```typst
-#raw("path\\to\\file", lang: "text")
-```
+Inside `#raw("...")` strings, only escape `\` → `\\` and `"` → `\"`.
 
 ## Document Structure
-
-### From LaTeX
 
 LaTeX:
 
@@ -294,37 +199,6 @@ Typst:
 Content here.
 ```
 
-### From Markdown
-
-Markdown:
-
-```markdown
----
-title: My Document
-author: Author Name
----
-
-# Introduction
-
-Some **bold** and _italic_ text.
-
-- List item 1
-- List item 2
-```
-
-Typst:
-
-```typst
-#set document(title: "My Document", author: "Author Name")
-
-= Introduction
-
-Some *bold* and _italic_ text.
-
-- List item 1
-- List item 2
-```
-
 ## Current Limitations vs LaTeX
 
 - **Plotting ecosystem**: LaTeX has mature PGF/TikZ. Typst's `cetz` is catching up but narrower. See [package search](scripts/search-packages.py) for alternatives.
@@ -335,30 +209,14 @@ Some *bold* and _italic_ text.
 
 ## Using Pandoc for Conversion
 
-Pandoc (since v2.18) supports Typst as an output format.
+Pandoc (since v2.18) supports Typst output:
 
 ```bash
-pandoc -f markdown -t typst input.md -o output.typ    # Markdown → Typst
-pandoc -f latex -t typst input.tex -o output.typ       # LaTeX → Typst
+pandoc -f markdown -t typst input.md -o output.typ      # Markdown → Typst
+pandoc -f latex -t typst input.tex -o output.typ        # LaTeX → Typst
 pandoc input.md -o output.pdf --pdf-engine=typst        # Markdown → PDF via Typst
 ```
 
-### Common Options
+Key `-V` variables: `title`, `author`, `papersize`, `fontsize`, `mainfont`/`mathfont`/`codefont`, `section-numbering`, `page-numbering`, `columns`, `linestretch`, `linkcolor`. Custom templates: `pandoc -D typst > template.typ`, then `--template=template.typ`.
 
-```bash
-pandoc input.md -t typst -o output.typ \
-  -V papersize=a4 -V fontsize=12pt -V mainfont="Libertinus Serif" \
-  -V section-numbering="1.1" --toc
-```
-
-Key `-V` variables: `title`, `author`, `papersize`, `margin`, `fontsize`, `mainfont`/`mathfont`/`codefont`, `section-numbering`, `page-numbering`, `columns`, `linestretch`, `linkcolor`. These can also be set via YAML frontmatter.
-
-Custom templates: `pandoc -D typst > template.typ`, then `pandoc input.md --template=template.typ -o output.typ`.
-
-### Known Limitations
-
-- **Citations**: `@ref` in Markdown → `#cite(<ref>)` in Typst. Escape literal `@` with `\@`.
-- **Complex tables**: Cell merging needs manual adjustment.
-- **Raw Typst blocks**: Use ```` ```{=typst} ```` fenced blocks for unsupported features.
-
-Review and refine Pandoc output — custom styling and advanced layout usually need manual adjustment.
+Known limitations: Markdown `@ref` becomes `#cite(<ref>)` (escape literal `@` as `\@`); cell merging in complex tables needs manual work; use ```` ```{=typst} ```` fenced blocks for unsupported features. Always review Pandoc output — custom styling and advanced layout need manual adjustment.
