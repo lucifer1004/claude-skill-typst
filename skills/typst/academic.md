@@ -105,12 +105,12 @@ common failures in math-heavy notes. Full writeup, greps, and false-alarm
 exclusions are in **[debug.md](debug.md)** ("Common Errors & Symbol Gotchas"); the
 one-line reminders here just flag their existence on the authoring path.
 
-| Trap                                           | Wrong                           | Right                                          |
-| ---------------------------------------------- | ------------------------------- | ---------------------------------------------- |
-| Letter/string script swallows the next `(`/`[` | `alpha_c(N)` → subscript `c(N)` | space or parens: `alpha_c (N)`, `alpha_(c)(N)` |
-| Fraction `/` grabs one atom                    | `A(x) / B(y)` → `A·(x/B)·(y)`   | `frac(A(x), B(y))`                             |
-| Math-mode `"--"` stays two hyphens             | `1.60 "--" 1.61`                | `1.60"–"1.61` or `dash.en`                     |
-| Wide display eq collides with `(N)`            | overflow jams the number in     | break with `\`, or unnumber                    |
+| Trap                                           | Wrong                                   | Right                                          |
+| ---------------------------------------------- | --------------------------------------- | ---------------------------------------------- |
+| Letter/string script swallows the next `(`/`[` | `alpha_c(N)` → subscript `c(N)`         | space or parens: `alpha_c (N)`, `alpha_(c)(N)` |
+| Fraction `/` grabs one atom on chained calls   | `cal(Z)(S) / cal(Z)(0)` → `𝒵·(S/𝒵)·(0)` | `frac(cal(Z)(S), cal(Z)(0))`                   |
+| Math-mode `"--"` stays two hyphens             | `1.60 "--" 1.61`                        | `1.60"–"1.61` or `dash.en`                     |
+| Wide display eq collides with `(N)`            | overflow jams the number in             | break with `\`, or unnumber                    |
 
 Digit scripts (`F_1(a)`) and paren-base scripts (`bb(E)_(nu_n)[…]`, `Phi^(-1)(x)`)
 are **safe** — don't "fix" them; see debug.md for why. These are invisible in the
