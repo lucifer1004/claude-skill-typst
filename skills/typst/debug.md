@@ -8,11 +8,11 @@ Recurring failures hit when authoring math-heavy documents. Each cost a compile 
 
 ### Math symbols that don't exist under the name you'd guess
 
-| You wrote                                   | Error                     | Correct                                                                        |
-| ------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------ |
-| `angle.l` / `angle.r` (for ⟨ ⟩)             | `unknown symbol modifier` | `chevron.l` / `chevron.r` (or literal `⟨ ⟩` inside `lr(...)`)                  |
-| `check(x)` (háček accent)                   | `unknown variable: check` | `caron(x)` — the check/háček accent is named `caron`                           |
-| `times.circle` / `times.circle.big` (for ⊗) | `unknown symbol modifier` | literal `⊗` glyph in the source. **Not** `product.co` (that's the coproduct ∐) |
+| You wrote                                       | Error                     | Correct                                                                                                                          |
+| ----------------------------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `angle.l` / `angle.r` (for ⟨ ⟩)                 | `unknown symbol modifier` | `chevron.l` / `chevron.r` (or literal `⟨ ⟩` inside `lr(...)`)                                                                    |
+| `check(x)` (háček accent)                       | `unknown variable: check` | `caron(x)` — the check/háček accent is named `caron`                                                                             |
+| `times.circle` / `times.circle.big` (for ⊗ / ⨂) | `unknown symbol modifier` | `times.o` / `times.o.big` — circled operators take the `.o` modifier (`plus.o` ⊕). **Not** `product.co` (that's the coproduct ∐) |
 
 General rule: when a `symbol.modifier` chain errors with *"unknown symbol modifier"*, the modifier path is wrong — verify against the API data (`scripts/search-api.py`) or just paste the literal Unicode glyph into the math, which always works. Math accent functions are `hat, tilde, macron/overline, dot, dot.double, acute, grave, breve, circle, caron, arrow` — there is **no** `check`, `bar` is `macron`, etc.
 
